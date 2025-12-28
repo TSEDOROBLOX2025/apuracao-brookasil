@@ -6,7 +6,7 @@
 }
 
 body {
-    background: #f1f6f5;
+    background: #f1f7f6;
     color: #222;
 }
 
@@ -48,10 +48,10 @@ main {
 }
 
 .barra {
+    height: 12px;
     background: #ddd;
     border-radius: 6px;
     overflow: hidden;
-    height: 12px;
     margin-top: 4px;
 }
 
@@ -65,24 +65,12 @@ main {
     font-weight: bold;
 }
 
-.controles {
-    display: flex;
-    justify-content: space-around;
-    padding: 15px;
-}
-
-button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 8px;
-    background: #0a5ed7;
-    color: white;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-button:hover {
-    opacity: 0.9;
+.zonas {
+    margin-top: 10px;
+    font-size: 13px;
+    background: #eef4f3;
+    padding: 8px;
+    border-radius: 6px;
 }
 
 footer {
