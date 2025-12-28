@@ -1,142 +1,128 @@
-/**********************************************************
- ÁREA DE ADMINISTRAÇÃO (EDITÁVEL PELO ADMIN)
-**********************************************************/
+/************************************************
+ CONFIGURAÇÃO ADMINISTRATIVA
+************************************************/
 
-const ADMIN = {
-    turno: 2, // 1 ou 2
-    totalSessoes: 35,
+const TURNO = 2;
+const TOTAL_SESSOES = 35;
+const INTERVALO = 5000; // 5 segundos
 
-    cargos: {
-        Presidente: {
-            candidatos: {
-                "Henrique C.": 4218,
-                "Álvaro A.": 3782
-            }
-        },
-
-        Governador: null,
-        Senador: null,
-        DeputadoFederal: null,
-        DeputadoEstadual: null,
-        Prefeito: null,
-        Vereador: null
-    }
+const RESULTADO_FINAL = {
+    "Henrique C.": 4218,
+    "Álvaro A.": 3782
 };
 
-/**********************************************************
- VARIÁVEIS GLOBAIS
-**********************************************************/
+// Zonas eleitorais
+const ZONAS = {
+    "Henrique C.": [
+        "BH-01 a BH-07",
+        "NC-01 a NC-06",
+        "CT-01 a CT-05",
+        "FM-01 a FM-04",
+        "FX-01 a FX-06"
+    ],
+    "Álvaro A.": [
+        "BH-08 a BH-14",
+        "NC-07 a NC-11",
+        "CT-06 a CT-12",
+        "FM-05 a FM-10",
+        "FX-07 a FX-14"
+    ]
+};
+
+/************************************************
+ VARIÁVEIS
+************************************************/
 
 let sessaoAtual = 1;
-let dadosProcessados = {};
+let sessoes = [];
 const container = document.getElementById("apuração");
 
-/**********************************************************
- FUNÇÕES PRINCIPAIS
-**********************************************************/
+/************************************************
+ GERA SESSÕES CONTROLADAS
+************************************************/
 
-// Inicializa dados e gera curvas realistas
-function prepararDados() {
-    for (let cargo in ADMIN.cargos) {
-        if (!ADMIN.cargos[cargo]) continue;
+function gerarSessoes() {
+    for (let i = 1; i <= TOTAL_SESSOES; i++) {
+        let fator = i / TOTAL_SESSOES;
 
-        let candidatos = ADMIN.cargos[cargo].candidatos;
-        let lista = Object.entries(candidatos);
+        let h = Math.round(RESULTADO_FINAL["Henrique C."] * fator);
+        let a = Math.round(RESULTADO_FINAL["Álvaro A."] * fator);
 
-        // Se for 2º turno, pega apenas os dois mais votados
-        if (ADMIN.turno === 2) {
-            lista.sort((a, b) => b[1] - a[1]);
-            lista = lista.slice(0, 2);
+        // Controle de viradas
+        if (i <= 15) {
+            a += 120;
+        } else if (i <= 25) {
+            h += 150;
+        } else if (i <= 34) {
+            a += 100;
         }
 
-        dadosProcessados[cargo] = gerarSessoes(lista);
-    }
-}
-
-// Gera sessões com reviravoltas realistas
-function gerarSessoes(candidatos) {
-    let sessoes = [];
-    let acumulado = {};
-
-    candidatos.forEach(c => acumulado[c[0]] = 0);
-
-    for (let i = 1; i <= ADMIN.totalSessoes; i++) {
-        let fator = i / ADMIN.totalSessoes;
-        let sessao = {};
-
-        candidatos.forEach(([nome, votosFinais]) => {
-            let base = votosFinais * fator;
-            let ruido = (Math.random() - 0.5) * votosFinais * 0.05;
-            sessao[nome] = Math.max(0, Math.round(base + ruido));
+        sessoes.push({
+            "Henrique C.": h,
+            "Álvaro A.": a
         });
-
-        sessoes.push(sessao);
     }
 
-    // Corrige a última sessão para bater exatamente
-    let ultima = sessoes[sessoes.length - 1];
-    candidatos.forEach(([nome, votos]) => {
-        ultima[nome] = votos;
-    });
-
-    return sessoes;
+    // Correção final exata
+    sessoes[TOTAL_SESSOES - 1] = RESULTADO_FINAL;
 }
 
-// Renderiza a sessão atual
+/************************************************
+ RENDERIZAÇÃO
+************************************************/
+
 function renderizar() {
     container.innerHTML = "";
+
     document.getElementById("turnoAtual").innerText =
-        `Hoje é o ${ADMIN.turno}º turno • Sessão ${sessaoAtual}/${ADMIN.totalSessoes}`;
+        `Hoje é o ${TURNO}º turno • Sessão ${sessaoAtual}/${TOTAL_SESSOES}`;
 
-    for (let cargo in dadosProcessados) {
-        let dados = dadosProcessados[cargo][sessaoAtual - 1];
-        let total = Object.values(dados).reduce((a, b) => a + b, 0);
+    const dados = sessoes[sessaoAtual - 1];
+    const total = dados["Henrique C."] + dados["Álvaro A."];
 
-        let div = document.createElement("div");
-        div.className = "cargo";
+    let html = `
+        <div class="cargo">
+            <h2>Presidente</h2>
+            <div class="info">Sessão ${sessaoAtual}</div>
+    `;
 
-        let html = `<h2>${cargo}</h2>
-                    <div class="info">Sessão ${sessaoAtual}</div>`;
+    for (let nome in dados) {
+        let votos = dados[nome];
+        let perc = ((votos / total) * 100).toFixed(2);
 
-        for (let nome in dados) {
-            let votos = dados[nome];
-            let perc = total ? ((votos / total) * 100).toFixed(1) : 0;
-
-            html += `
-                <div class="candidato">
-                    <div class="nome">${nome} - ${votos} votos (${perc}%)</div>
-                    <div class="barra">
-                        <div class="progresso" style="width:${perc}%"></div>
-                    </div>
+        html += `
+            <div class="candidato">
+                <div class="nome">${nome} — ${votos} votos (${perc}%)</div>
+                <div class="barra">
+                    <div class="progresso" style="width:${perc}%"></div>
                 </div>
-            `;
-        }
-
-        html += `<div class="total">Total de votos: ${total}</div>`;
-        div.innerHTML = html;
-        container.appendChild(div);
+            </div>
+        `;
     }
+
+    html += `
+        <div class="total">Total de votos: ${total}</div>
+        <div class="zonas">
+            <strong>Zonas com maior votação:</strong><br>
+            Henrique C.: ${ZONAS["Henrique C."].join(", ")}<br>
+            Álvaro A.: ${ZONAS["Álvaro A."].join(", ")}
+        </div>
+        </div>
+    `;
+
+    container.innerHTML = html;
 }
 
-/**********************************************************
- CONTROLES
-**********************************************************/
+/************************************************
+ INÍCIO AUTOMÁTICO
+************************************************/
 
-document.getElementById("btnSessao").onclick = () => {
-    if (sessaoAtual < ADMIN.totalSessoes) {
+gerarSessoes();
+renderizar();
+
+setInterval(() => {
+    if (sessaoAtual < TOTAL_SESSOES) {
         sessaoAtual++;
         renderizar();
     }
-};
-
-document.getElementById("btnFinal").onclick = () => {
-    sessaoAtual = ADMIN.totalSessoes;
-    renderizar();
-};
-
-/**********************************************************
- INICIALIZAÇÃO
-**********************************************************/
-
-prepararDados();
-renderizar();
+}, INTERVALO);
