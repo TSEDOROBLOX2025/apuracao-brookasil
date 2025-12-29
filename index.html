@@ -1,24 +1,292 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Apuração Eleitoral - RP</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<meta charset="UTF-8">
+<title>Tribunal Eleitoral • Apuração Oficial</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<style>
+/* ==================================================
+   ESTILO INSTITUCIONAL – VERDE E AZUL
+   ================================================== */
+:root{
+    --verde:#1f8f4a;
+    --azul:#0b4ea2;
+    --cinza:#f2f4f7;
+    --escuro:#1f2933;
+}
+
+*{
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    margin:0;
+    background:var(--cinza);
+    color:var(--escuro);
+}
+
+header{
+    background:linear-gradient(90deg, var(--azul), var(--verde));
+    color:#fff;
+    padding:16px;
+    text-align:center;
+}
+
+header h1{
+    margin:0;
+    font-size:1.2rem;
+}
+
+header p{
+    margin:4px 0 0;
+    font-size:0.9rem;
+}
+
+main{
+    max-width:900px;
+    margin:auto;
+    padding:16px;
+}
+
+.status{
+    text-align:center;
+    font-weight:bold;
+    margin-bottom:10px;
+    color:var(--azul);
+}
+
+.sessao{
+    text-align:center;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.countdown{
+    text-align:center;
+    font-size:1.4rem;
+    color:var(--verde);
+    margin-bottom:16px;
+}
+
+.progress-container{
+    background:#ddd;
+    border-radius:10px;
+    overflow:hidden;
+    height:16px;
+    margin-bottom:20px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--verde), var(--azul));
+    transition:width 0.5s linear;
+}
+
+.candidatos{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.card{
+    background:#fff;
+    border-radius:12px;
+    padding:14px;
+    border:2px solid transparent;
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+.card.lider{
+    border-color:var(--verde);
+    box-shadow:0 0 0 2px rgba(31,143,74,0.25);
+}
+
+.nome{
+    font-size:1.1rem;
+    font-weight:bold;
+}
+
+.numero{
+    font-size:0.85rem;
+    opacity:0.7;
+}
+
+.votos{
+    margin-top:6px;
+}
+
+.porcentagem{
+    font-size:1.2rem;
+    font-weight:bold;
+}
+
+.total{
+    text-align:center;
+    margin-top:18px;
+    font-weight:bold;
+}
+
+@media(min-width:600px){
+    .candidatos{
+        flex-direction:row;
+    }
+}
+</style>
+</head>
+
+<body>
 <header>
-    <h1>Apuração Eleitoral</h1>
-    <p id="turnoAtual"></p>
+    <h1>Tribunal Eleitoral</h1>
+    <p>2º Turno • Apuração para Presidente</p>
 </header>
 
-<main id="apuração"></main>
+<main>
+    <div id="status" class="status">Apuração em andamento</div>
 
-<footer>
-    <p>Apuração automática • Atualização a cada 5 segundos</p>
-</footer>
+    <div id="sessao" class="sessao">Sessão 1 de 35</div>
+    <div id="countdown" class="countdown">Próxima atualização em: 5</div>
 
-<script src="script.js"></script>
+    <div class="progress-container">
+        <div id="progressBar" class="progress-bar"></div>
+    </div>
+
+    <div class="candidatos">
+        <div id="henrique" class="card">
+            <div class="nome">Henrique C.</div>
+            <div class="numero">Número: 44</div>
+            <div class="votos">Votos: <span id="vHenrique">0</span></div>
+            <div class="porcentagem"><span id="pHenrique">0,00</span>%</div>
+        </div>
+
+        <div id="alvaro" class="card">
+            <div class="nome">Álvaro A.</div>
+            <div class="numero">Número: 55</div>
+            <div class="votos">Votos: <span id="vAlvaro">0</span></div>
+            <div class="porcentagem"><span id="pAlvaro">0,00</span>%</div>
+        </div>
+    </div>
+
+    <div class="total">
+        Total de votos apurados: <span id="totalVotos">0</span>
+    </div>
+</main>
+
+<script>
+/* =========================================================
+   APURAÇÃO ELEITORAL – LÓGICA REVISADA E CORRIGIDA
+   ✔ 35 sessões automáticas
+   ✔ Countdown visual de 5 segundos
+   ✔ Reviravoltas EXATAS conforme especificado
+   ✔ Resultado final 100% fiel aos números oficiais
+   ========================================================= */
+
+const TOTAL_SESSOES = 35;
+const TOTAL_VOTOS = 8000;
+
+// Define QUEM LIDERA em cada bloco de sessões
+function liderDaSessao(sessao){
+    if(sessao >= 1 && sessao <= 15) return "ALVARO";
+    if(sessao >= 16 && sessao <= 30) return "HENRIQUE";
+    if(sessao >= 31 && sessao <= 34) return "ALVARO";
+    return "HENRIQUE"; // sessão 35
+}
+
+let sessaoAtual = 1;
+let countdown = 5;
+let timer = null;
+
+// Formatação pt-BR
+function fmt(n){
+    return n.toLocaleString("pt-BR");
+}
+
+function atualizarTela(){
+    document.getElementById("sessao").innerText =
+        `Sessão ${sessaoAtual} de ${TOTAL_SESSOES}`;
+
+    // Barra de progresso
+    document.getElementById("progressBar").style.width =
+        ((sessaoAtual / TOTAL_SESSOES) * 100) + "%";
+
+    // Total acumulado proporcional
+    let totalAteAgora = Math.round(TOTAL_VOTOS * (sessaoAtual / TOTAL_SESSOES));
+
+    let votosHenrique = 0;
+    let votosAlvaro = 0;
+
+    // Sessão final: números oficiais fixos
+    if(sessaoAtual === TOTAL_SESSOES){
+        votosHenrique = 4218;
+        votosAlvaro = 3782;
+        totalAteAgora = 8000;
+    }else{
+        const lider = liderDaSessao(sessaoAtual);
+
+        if(lider === "ALVARO"){
+            votosAlvaro = Math.ceil(totalAteAgora * 0.51);
+            votosHenrique = totalAteAgora - votosAlvaro;
+        }else{
+            votosHenrique = Math.ceil(totalAteAgora * 0.51);
+            votosAlvaro = totalAteAgora - votosHenrique;
+        }
+    }
+
+    // Percentuais
+    const pH = ((votosHenrique / totalAteAgora) * 100).toFixed(2);
+    const pA = ((votosAlvaro / totalAteAgora) * 100).toFixed(2);
+
+    // Atualiza valores
+    document.getElementById("vHenrique").innerText = fmt(votosHenrique);
+    document.getElementById("vAlvaro").innerText = fmt(votosAlvaro);
+    document.getElementById("pHenrique").innerText = pH.replace(".", ",");
+    document.getElementById("pAlvaro").innerText = pA.replace(".", ",");
+    document.getElementById("totalVotos").innerText = fmt(totalAteAgora);
+
+    // Destaque do líder
+    document.getElementById("henrique").classList.remove("lider");
+    document.getElementById("alvaro").classList.remove("lider");
+
+    if(votosHenrique > votosAlvaro){
+        document.getElementById("henrique").classList.add("lider");
+    }else{
+        document.getElementById("alvaro").classList.add("lider");
+    }
+
+    // Encerramento
+    if(sessaoAtual === TOTAL_SESSOES){
+        document.getElementById("status").innerText =
+            "APURAÇÃO ENCERRADA – RESULTADO OFICIAL";
+        document.getElementById("countdown").innerText = "";
+        clearInterval(timer);
+    }
+}
+
+function iniciarApuracao(){
+    atualizarTela();
+
+    timer = setInterval(() => {
+        countdown--;
+        document.getElementById("countdown").innerText =
+            `Próxima atualização em: ${countdown}`;
+
+        if(countdown === 0){
+            sessaoAtual++;
+            countdown = 5;
+
+            if(sessaoAtual <= TOTAL_SESSOES){
+                atualizarTela();
+            }else{
+                clearInterval(timer);
+            }
+        }
+    }, 1000);
+}
+
+// Inicialização automática
+iniciarApuracao();
+</script>
 </body>
 </html>
