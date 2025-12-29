@@ -6,14 +6,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* ==================================================
-   ESTILO INSTITUCIONAL – VERDE E AZUL
-   ================================================== */
+/* =====================================================
+   ESTILO INSTITUCIONAL – TRIBUNAL ELEITORAL
+   ===================================================== */
 :root{
     --verde:#1f8f4a;
     --azul:#0b4ea2;
     --cinza:#f2f4f7;
     --escuro:#1f2933;
+    --claro:#ffffff;
 }
 
 *{
@@ -36,16 +37,17 @@ header{
 
 header h1{
     margin:0;
-    font-size:1.2rem;
+    font-size:1.3rem;
 }
 
 header p{
     margin:4px 0 0;
     font-size:0.9rem;
+    opacity:0.95;
 }
 
 main{
-    max-width:900px;
+    max-width:1000px;
     margin:auto;
     padding:16px;
 }
@@ -60,14 +62,14 @@ main{
 .sessao{
     text-align:center;
     font-weight:bold;
-    margin-bottom:8px;
+    margin-bottom:6px;
 }
 
 .countdown{
     text-align:center;
     font-size:1.4rem;
     color:var(--verde);
-    margin-bottom:16px;
+    margin-bottom:12px;
 }
 
 .progress-container{
@@ -75,24 +77,25 @@ main{
     border-radius:10px;
     overflow:hidden;
     height:16px;
-    margin-bottom:20px;
+    margin-bottom:16px;
 }
 
 .progress-bar{
     height:100%;
     width:0%;
     background:linear-gradient(90deg, var(--verde), var(--azul));
-    transition:width 0.5s linear;
+    transition:width 0.4s linear;
 }
 
 .candidatos{
     display:flex;
     flex-direction:column;
     gap:12px;
+    margin-bottom:20px;
 }
 
 .card{
-    background:#fff;
+    background:var(--claro);
     border-radius:12px;
     padding:14px;
     border:2px solid transparent;
@@ -125,11 +128,47 @@ main{
 
 .total{
     text-align:center;
-    margin-top:18px;
+    font-weight:bold;
+    margin-bottom:16px;
+}
+
+/* ZONAS */
+.zonas{
+    background:#fff;
+    border-radius:12px;
+    padding:14px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+.zonas h3{
+    margin:0 0 10px;
+    font-size:1rem;
+    color:var(--azul);
+}
+
+.zona{
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+    border-bottom:1px solid #eee;
+    font-size:0.9rem;
+}
+
+.zona:last-child{
+    border-bottom:none;
+}
+
+.vencedor-h{
+    color:var(--verde);
     font-weight:bold;
 }
 
-@media(min-width:600px){
+.vencedor-a{
+    color:var(--azul);
+    font-weight:bold;
+}
+
+@media(min-width:700px){
     .candidatos{
         flex-direction:row;
     }
@@ -172,80 +211,156 @@ main{
     <div class="total">
         Total de votos apurados: <span id="totalVotos">0</span>
     </div>
+
+    <div class="zonas">
+        <h3>Zonas apuradas nesta sessão</h3>
+        <div id="listaZonas"></div>
+    </div>
 </main>
 
 <script>
 /* =========================================================
-   APURAÇÃO ELEITORAL – LÓGICA REVISADA E CORRIGIDA
-   ✔ 35 sessões automáticas
-   ✔ Countdown visual de 5 segundos
-   ✔ Reviravoltas EXATAS conforme especificado
-   ✔ Resultado final 100% fiel aos números oficiais
+   CONFIGURAÇÃO GERAL DA ELEIÇÃO
    ========================================================= */
 
-const TOTAL_SESSOES = 35;
-const TOTAL_VOTOS = 8000;
+// Cargos EXISTENTES no código (somente PRESIDENTE é exibido)
+const cargos = [
+    "Presidente",
+    "Governador",
+    "Senador",
+    "Deputado Federal",
+    "Deputado Estadual",
+    "Prefeito",
+    "Vereador"
+];
 
-// Define QUEM LIDERA em cada bloco de sessões
-function liderDaSessao(sessao){
-    if(sessao >= 1 && sessao <= 15) return "ALVARO";
-    if(sessao >= 16 && sessao <= 30) return "HENRIQUE";
-    if(sessao >= 31 && sessao <= 34) return "ALVARO";
-    return "HENRIQUE"; // sessão 35
+// Total oficial
+const TOTAL_VOTOS = 8000;
+const TOTAL_SESSOES = 35;
+
+// Zonas eleitorais (61 no total)
+const zonas = [];
+
+// Brookhaven (14)
+for(let i=1;i<=14;i++) zonas.push("BH-" + String(i).padStart(2,"0"));
+// Novacore (11)
+for(let i=1;i<=11;i++) zonas.push("NC-" + String(i).padStart(2,"0"));
+// Casteríber (12)
+for(let i=1;i<=12;i++) zonas.push("CT-" + String(i).padStart(2,"0"));
+// Fortemega (10)
+for(let i=1;i<=10;i++) zonas.push("FM-" + String(i).padStart(2,"0"));
+// Florêmix (14)
+for(let i=1;i<=14;i++) zonas.push("FX-" + String(i).padStart(2,"0"));
+
+/* =========================================================
+   DISTRIBUIÇÃO DAS ZONAS POR SESSÃO
+   - Total: 61 zonas
+   - 35 sessões (1 ou 2 zonas por sessão)
+   ========================================================= */
+
+const zonasPorSessao = [];
+let indiceZona = 0;
+
+for(let s=1;s<=TOTAL_SESSOES;s++){
+    const qtd = (s % 2 === 0) ? 2 : 1; // alterna 1 e 2 zonas
+    zonasPorSessao.push(zonas.slice(indiceZona, indiceZona + qtd));
+    indiceZona += qtd;
 }
 
+// Ajuste final para garantir todas as zonas
+if(indiceZona < zonas.length){
+    zonasPorSessao[zonasPorSessao.length-1].push(...zonas.slice(indiceZona));
+}
+
+/* =========================================================
+   CONTROLE DE REVIROLTAS (QUEM GANHA A SESSÃO)
+   ========================================================= */
+function liderDaSessao(sessao){
+    if(sessao <= 15) return "ALVARO";
+    if(sessao <= 30) return "HENRIQUE";
+    if(sessao <= 34) return "ALVARO";
+    return "HENRIQUE";
+}
+
+/* =========================================================
+   ESTADO DA APURAÇÃO
+   ========================================================= */
 let sessaoAtual = 1;
 let countdown = 5;
 let timer = null;
 
-// Formatação pt-BR
+let votosHenrique = 0;
+let votosAlvaro = 0;
+let zonasApuradas = 0;
+
+/* =========================================================
+   FUNÇÕES AUXILIARES
+   ========================================================= */
 function fmt(n){
     return n.toLocaleString("pt-BR");
 }
 
-function atualizarTela(){
+/* =========================================================
+   ATUALIZA A INTERFACE A CADA SESSÃO
+   ========================================================= */
+function atualizarSessao(){
     document.getElementById("sessao").innerText =
         `Sessão ${sessaoAtual} de ${TOTAL_SESSOES}`;
 
-    // Barra de progresso
-    document.getElementById("progressBar").style.width =
-        ((sessaoAtual / TOTAL_SESSOES) * 100) + "%";
+    const zonasDaSessao = zonasPorSessao[sessaoAtual-1];
+    const lider = liderDaSessao(sessaoAtual);
 
-    // Total acumulado proporcional
-    let totalAteAgora = Math.round(TOTAL_VOTOS * (sessaoAtual / TOTAL_SESSOES));
+    const lista = document.getElementById("listaZonas");
+    lista.innerHTML = "";
 
-    let votosHenrique = 0;
-    let votosAlvaro = 0;
+    // Cada zona distribui votos proporcionais
+    zonasDaSessao.forEach(zona=>{
+        const votosZona = Math.round(TOTAL_VOTOS / zonas.length);
 
-    // Sessão final: números oficiais fixos
+        if(lider === "HENRIQUE"){
+            votosHenrique += Math.round(votosZona * 0.55);
+            votosAlvaro += votosZona - Math.round(votosZona * 0.55);
+        }else{
+            votosAlvaro += Math.round(votosZona * 0.55);
+            votosHenrique += votosZona - Math.round(votosZona * 0.55);
+        }
+
+        const div = document.createElement("div");
+        div.className = "zona";
+        div.innerHTML = `
+            <span>${zona}</span>
+            <span class="${lider === "HENRIQUE" ? "vencedor-h":"vencedor-a"}">
+                ${lider === "HENRIQUE" ? "Henrique C." : "Álvaro A."}
+            </span>
+        `;
+        lista.appendChild(div);
+    });
+
+    zonasApuradas += zonasDaSessao.length;
+
+    // Sessão final: força resultado oficial EXATO
     if(sessaoAtual === TOTAL_SESSOES){
         votosHenrique = 4218;
         votosAlvaro = 3782;
-        totalAteAgora = 8000;
-    }else{
-        const lider = liderDaSessao(sessaoAtual);
-
-        if(lider === "ALVARO"){
-            votosAlvaro = Math.ceil(totalAteAgora * 0.51);
-            votosHenrique = totalAteAgora - votosAlvaro;
-        }else{
-            votosHenrique = Math.ceil(totalAteAgora * 0.51);
-            votosAlvaro = totalAteAgora - votosHenrique;
-        }
+        zonasApuradas = zonas.length;
     }
 
-    // Percentuais
-    const pH = ((votosHenrique / totalAteAgora) * 100).toFixed(2);
-    const pA = ((votosAlvaro / totalAteAgora) * 100).toFixed(2);
+    const totalAtual = votosHenrique + votosAlvaro;
 
-    // Atualiza valores
+    const pH = ((votosHenrique / totalAtual) * 100).toFixed(2).replace(".",",");
+    const pA = ((votosAlvaro / totalAtual) * 100).toFixed(2).replace(".",",");
+
     document.getElementById("vHenrique").innerText = fmt(votosHenrique);
     document.getElementById("vAlvaro").innerText = fmt(votosAlvaro);
-    document.getElementById("pHenrique").innerText = pH.replace(".", ",");
-    document.getElementById("pAlvaro").innerText = pA.replace(".", ",");
-    document.getElementById("totalVotos").innerText = fmt(totalAteAgora);
+    document.getElementById("pHenrique").innerText = pH;
+    document.getElementById("pAlvaro").innerText = pA;
+    document.getElementById("totalVotos").innerText = fmt(totalAtual);
 
-    // Destaque do líder
+    // Barra de progresso por zonas
+    document.getElementById("progressBar").style.width =
+        ((zonasApuradas / zonas.length) * 100) + "%";
+
+    // Destaque do líder geral
     document.getElementById("henrique").classList.remove("lider");
     document.getElementById("alvaro").classList.remove("lider");
 
@@ -264,10 +379,13 @@ function atualizarTela(){
     }
 }
 
+/* =========================================================
+   CONTROLE AUTOMÁTICO DAS SESSÕES
+   ========================================================= */
 function iniciarApuracao(){
-    atualizarTela();
+    atualizarSessao();
 
-    timer = setInterval(() => {
+    timer = setInterval(()=>{
         countdown--;
         document.getElementById("countdown").innerText =
             `Próxima atualização em: ${countdown}`;
@@ -277,12 +395,12 @@ function iniciarApuracao(){
             countdown = 5;
 
             if(sessaoAtual <= TOTAL_SESSOES){
-                atualizarTela();
+                atualizarSessao();
             }else{
                 clearInterval(timer);
             }
         }
-    }, 1000);
+    },1000);
 }
 
 // Inicialização automática
