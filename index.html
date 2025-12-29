@@ -14,7 +14,7 @@
     --azul:#0b4ea2;
     --cinza:#f2f4f7;
     --escuro:#1f2933;
-    --claro:#ffffff;
+    --branco:#ffffff;
 }
 
 *{
@@ -29,7 +29,7 @@ body{
 }
 
 header{
-    background:linear-gradient(90deg, var(--azul), var(--verde));
+    background:linear-gradient(90deg,var(--azul),var(--verde));
     color:#fff;
     padding:16px;
     text-align:center;
@@ -43,11 +43,10 @@ header h1{
 header p{
     margin:4px 0 0;
     font-size:0.9rem;
-    opacity:0.95;
 }
 
 main{
-    max-width:1000px;
+    max-width:1100px;
     margin:auto;
     padding:16px;
 }
@@ -55,14 +54,13 @@ main{
 .status{
     text-align:center;
     font-weight:bold;
-    margin-bottom:10px;
+    margin-bottom:14px;
     color:var(--azul);
 }
 
 .sessao{
     text-align:center;
     font-weight:bold;
-    margin-bottom:6px;
 }
 
 .countdown{
@@ -72,18 +70,37 @@ main{
     margin-bottom:12px;
 }
 
+.painel{
+    background:var(--branco);
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:22px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.painel h2{
+    margin:0 0 6px;
+    color:var(--azul);
+}
+
+.subtitulo{
+    font-size:0.85rem;
+    opacity:0.75;
+    margin-bottom:10px;
+}
+
 .progress-container{
     background:#ddd;
     border-radius:10px;
     overflow:hidden;
-    height:16px;
-    margin-bottom:16px;
+    height:14px;
+    margin-bottom:12px;
 }
 
 .progress-bar{
     height:100%;
     width:0%;
-    background:linear-gradient(90deg, var(--verde), var(--azul));
+    background:linear-gradient(90deg,var(--verde),var(--azul));
     transition:width 0.4s linear;
 }
 
@@ -91,24 +108,21 @@ main{
     display:flex;
     flex-direction:column;
     gap:12px;
-    margin-bottom:20px;
+    margin-bottom:10px;
 }
 
 .card{
-    background:var(--claro);
-    border-radius:12px;
-    padding:14px;
     border:2px solid transparent;
-    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+    border-radius:12px;
+    padding:12px;
 }
 
 .card.lider{
     border-color:var(--verde);
-    box-shadow:0 0 0 2px rgba(31,143,74,0.25);
+    background:#f1fbf5;
 }
 
 .nome{
-    font-size:1.1rem;
     font-weight:bold;
 }
 
@@ -117,61 +131,28 @@ main{
     opacity:0.7;
 }
 
-.votos{
-    margin-top:6px;
-}
-
 .porcentagem{
     font-size:1.2rem;
     font-weight:bold;
 }
 
-.total{
-    text-align:center;
-    font-weight:bold;
-    margin-bottom:16px;
-}
-
-/* ZONAS */
 .zonas{
-    background:#fff;
-    border-radius:12px;
-    padding:14px;
-    box-shadow:0 2px 6px rgba(0,0,0,0.08);
-}
-
-.zonas h3{
-    margin:0 0 10px;
-    font-size:1rem;
-    color:var(--azul);
+    margin-top:10px;
+    font-size:0.9rem;
 }
 
 .zona{
     display:flex;
     justify-content:space-between;
-    padding:6px 0;
     border-bottom:1px solid #eee;
-    font-size:0.9rem;
+    padding:4px 0;
 }
 
-.zona:last-child{
-    border-bottom:none;
-}
-
-.vencedor-h{
-    color:var(--verde);
-    font-weight:bold;
-}
-
-.vencedor-a{
-    color:var(--azul);
-    font-weight:bold;
-}
+.vh{color:var(--verde);font-weight:bold;}
+.va{color:var(--azul);font-weight:bold;}
 
 @media(min-width:700px){
-    .candidatos{
-        flex-direction:row;
-    }
+    .candidatos{flex-direction:row;}
 }
 </style>
 </head>
@@ -179,232 +160,195 @@ main{
 <body>
 <header>
     <h1>Tribunal Eleitoral</h1>
-    <p>2º Turno • Apuração para Presidente</p>
+    <p>2º Turno • Apuração Oficial</p>
 </header>
 
 <main>
     <div id="status" class="status">Apuração em andamento</div>
-
     <div id="sessao" class="sessao">Sessão 1 de 35</div>
     <div id="countdown" class="countdown">Próxima atualização em: 5</div>
 
-    <div class="progress-container">
-        <div id="progressBar" class="progress-bar"></div>
-    </div>
-
-    <div class="candidatos">
-        <div id="henrique" class="card">
-            <div class="nome">Henrique C.</div>
-            <div class="numero">Número: 44</div>
-            <div class="votos">Votos: <span id="vHenrique">0</span></div>
-            <div class="porcentagem"><span id="pHenrique">0,00</span>%</div>
+    <!-- PRESIDENTE -->
+    <div class="painel">
+        <h2>PRESIDENTE</h2>
+        <div class="subtitulo">Apuração nacional</div>
+        <div class="progress-container">
+            <div id="progPres" class="progress-bar"></div>
         </div>
 
-        <div id="alvaro" class="card">
-            <div class="nome">Álvaro A.</div>
-            <div class="numero">Número: 55</div>
-            <div class="votos">Votos: <span id="vAlvaro">0</span></div>
-            <div class="porcentagem"><span id="pAlvaro">0,00</span>%</div>
+        <div class="candidatos">
+            <div id="pHenrique" class="card">
+                <div class="nome">Henrique C.</div>
+                <div class="numero">44</div>
+                <div>Votos: <span id="vpH">0</span></div>
+                <div class="porcentagem"><span id="ppH">0,00</span>%</div>
+            </div>
+            <div id="pAlvaro" class="card">
+                <div class="nome">Álvaro A.</div>
+                <div class="numero">55</div>
+                <div>Votos: <span id="vpA">0</span></div>
+                <div class="porcentagem"><span id="ppA">0,00</span>%</div>
+            </div>
         </div>
+
+        <div>Total de votos: <span id="tp">0</span></div>
+        <div class="zonas" id="zonasPres"></div>
     </div>
 
-    <div class="total">
-        Total de votos apurados: <span id="totalVotos">0</span>
-    </div>
+    <!-- GOVERNADOR -->
+    <div class="painel">
+        <h2>GOVERNADOR – Brookhaven</h2>
+        <div class="subtitulo">Apuração estadual</div>
+        <div class="progress-container">
+            <div id="progGov" class="progress-bar"></div>
+        </div>
 
-    <div class="zonas">
-        <h3>Zonas apuradas nesta sessão</h3>
-        <div id="listaZonas"></div>
+        <div class="candidatos">
+            <div id="gCharles" class="card">
+                <div class="nome">Charles R.</div>
+                <div class="numero">45</div>
+                <div>Votos: <span id="vgC">0</span></div>
+                <div class="porcentagem"><span id="pgC">0,00</span>%</div>
+            </div>
+            <div id="gJacinto" class="card">
+                <div class="nome">Jacinto L.</div>
+                <div class="numero">44</div>
+                <div>Votos: <span id="vgJ">0</span></div>
+                <div class="porcentagem"><span id="pgJ">0,00</span>%</div>
+            </div>
+        </div>
+
+        <div>Total de votos: <span id="tg">0</span></div>
+        <div class="zonas" id="zonasGov"></div>
     </div>
 </main>
 
 <script>
-/* =========================================================
-   CONFIGURAÇÃO GERAL DA ELEIÇÃO
-   ========================================================= */
+/* =====================================================
+   CONFIGURAÇÕES GERAIS
+   ===================================================== */
+const TOTAL_SESSOES = 35;
+const TOTAL_VOTOS = 8000;
 
-// Cargos EXISTENTES no código (somente PRESIDENTE é exibido)
-const cargos = [
-    "Presidente",
-    "Governador",
-    "Senador",
-    "Deputado Federal",
-    "Deputado Estadual",
-    "Prefeito",
-    "Vereador"
+/* ZONAS */
+const zonasBH = Array.from({length:14},(_,i)=>"BH-"+String(i+1).padStart(2,"0"));
+const zonasNacionais = [
+    ...zonasBH,
+    ...Array.from({length:11},(_,i)=>"NC-"+String(i+1).padStart(2,"0")),
+    ...Array.from({length:12},(_,i)=>"CT-"+String(i+1).padStart(2,"0")),
+    ...Array.from({length:10},(_,i)=>"FM-"+String(i+1).padStart(2,"0")),
+    ...Array.from({length:14},(_,i)=>"FX-"+String(i+1).padStart(2,"0"))
 ];
 
-// Total oficial
-const TOTAL_VOTOS = 8000;
-const TOTAL_SESSOES = 35;
-
-// Zonas eleitorais (61 no total)
-const zonas = [];
-
-// Brookhaven (14)
-for(let i=1;i<=14;i++) zonas.push("BH-" + String(i).padStart(2,"0"));
-// Novacore (11)
-for(let i=1;i<=11;i++) zonas.push("NC-" + String(i).padStart(2,"0"));
-// Casteríber (12)
-for(let i=1;i<=12;i++) zonas.push("CT-" + String(i).padStart(2,"0"));
-// Fortemega (10)
-for(let i=1;i<=10;i++) zonas.push("FM-" + String(i).padStart(2,"0"));
-// Florêmix (14)
-for(let i=1;i<=14;i++) zonas.push("FX-" + String(i).padStart(2,"0"));
-
-/* =========================================================
-   DISTRIBUIÇÃO DAS ZONAS POR SESSÃO
-   - Total: 61 zonas
-   - 35 sessões (1 ou 2 zonas por sessão)
-   ========================================================= */
-
-const zonasPorSessao = [];
-let indiceZona = 0;
-
-for(let s=1;s<=TOTAL_SESSOES;s++){
-    const qtd = (s % 2 === 0) ? 2 : 1; // alterna 1 e 2 zonas
-    zonasPorSessao.push(zonas.slice(indiceZona, indiceZona + qtd));
-    indiceZona += qtd;
+/* =====================================================
+   REGRAS DE LIDERANÇA
+   ===================================================== */
+function liderPres(sess){
+    if(sess<=15) return "A";
+    if(sess<=30) return "H";
+    if(sess<=34) return "A";
+    return "H";
+}
+function liderGov(sess){
+    if(sess<=10) return "C";
+    if(sess<=25) return "J";
+    if(sess<=33) return "C";
+    return "J";
 }
 
-// Ajuste final para garantir todas as zonas
-if(indiceZona < zonas.length){
-    zonasPorSessao[zonasPorSessao.length-1].push(...zonas.slice(indiceZona));
-}
+/* =====================================================
+   ESTADO
+   ===================================================== */
+let sessao=1, countdown=5, timer;
 
-/* =========================================================
-   CONTROLE DE REVIROLTAS (QUEM GANHA A SESSÃO)
-   ========================================================= */
-function liderDaSessao(sessao){
-    if(sessao <= 15) return "ALVARO";
-    if(sessao <= 30) return "HENRIQUE";
-    if(sessao <= 34) return "ALVARO";
-    return "HENRIQUE";
-}
+let vpH=0,vpA=0,vgC=0,vgJ=0;
+let zp=0,zg=0;
 
-/* =========================================================
-   ESTADO DA APURAÇÃO
-   ========================================================= */
-let sessaoAtual = 1;
-let countdown = 5;
-let timer = null;
+/* =====================================================
+   ATUALIZAÇÃO
+   ===================================================== */
+function atualizar(){
+    document.getElementById("sessao").innerText=`Sessão ${sessao} de ${TOTAL_SESSOES}`;
 
-let votosHenrique = 0;
-let votosAlvaro = 0;
-let zonasApuradas = 0;
+    /* PRESIDENTE */
+    const zonasSessaoP = zonasNacionais.slice(zp,zp+2);
+    const lp = liderPres(sessao);
+    const listaP=document.getElementById("zonasPres");
+    listaP.innerHTML="<strong>Zonas apuradas:</strong>";
 
-/* =========================================================
-   FUNÇÕES AUXILIARES
-   ========================================================= */
-function fmt(n){
-    return n.toLocaleString("pt-BR");
-}
-
-/* =========================================================
-   ATUALIZA A INTERFACE A CADA SESSÃO
-   ========================================================= */
-function atualizarSessao(){
-    document.getElementById("sessao").innerText =
-        `Sessão ${sessaoAtual} de ${TOTAL_SESSOES}`;
-
-    const zonasDaSessao = zonasPorSessao[sessaoAtual-1];
-    const lider = liderDaSessao(sessaoAtual);
-
-    const lista = document.getElementById("listaZonas");
-    lista.innerHTML = "";
-
-    // Cada zona distribui votos proporcionais
-    zonasDaSessao.forEach(zona=>{
-        const votosZona = Math.round(TOTAL_VOTOS / zonas.length);
-
-        if(lider === "HENRIQUE"){
-            votosHenrique += Math.round(votosZona * 0.55);
-            votosAlvaro += votosZona - Math.round(votosZona * 0.55);
-        }else{
-            votosAlvaro += Math.round(votosZona * 0.55);
-            votosHenrique += votosZona - Math.round(votosZona * 0.55);
-        }
-
-        const div = document.createElement("div");
-        div.className = "zona";
-        div.innerHTML = `
-            <span>${zona}</span>
-            <span class="${lider === "HENRIQUE" ? "vencedor-h":"vencedor-a"}">
-                ${lider === "HENRIQUE" ? "Henrique C." : "Álvaro A."}
-            </span>
-        `;
-        lista.appendChild(div);
+    zonasSessaoP.forEach(z=>{
+        const v=Math.round(TOTAL_VOTOS/zonasNacionais.length);
+        if(lp==="H"){vpH+=Math.round(v*0.55);vpA+=v-Math.round(v*0.55);}
+        else{vpA+=Math.round(v*0.55);vpH+=v-Math.round(v*0.55);}
+        listaP.innerHTML+=`<div class="zona"><span>${z}</span><span class="${lp==="H"?"vh":"va"}">${lp==="H"?"Henrique":"Álvaro"}</span></div>`;
     });
+    zp+=zonasSessaoP.length;
 
-    zonasApuradas += zonasDaSessao.length;
+    /* GOVERNADOR (apenas BH) */
+    const zonasSessaoG = zonasBH.slice(zg,zg+1);
+    const lg = liderGov(sessao);
+    const listaG=document.getElementById("zonasGov");
+    listaG.innerHTML="<strong>Zonas apuradas:</strong>";
 
-    // Sessão final: força resultado oficial EXATO
-    if(sessaoAtual === TOTAL_SESSOES){
-        votosHenrique = 4218;
-        votosAlvaro = 3782;
-        zonasApuradas = zonas.length;
-    }
+    zonasSessaoG.forEach(z=>{
+        const v=Math.round(TOTAL_VOTOS/zonasBH.length);
+        if(lg==="J"){vgJ+=Math.round(v*0.85);vgC+=v-Math.round(v*0.85);}
+        else{vgC+=Math.round(v*0.55);vgJ+=v-Math.round(v*0.55);}
+        listaG.innerHTML+=`<div class="zona"><span>${z}</span><span class="${lg==="J"?"vh":"va"}">${lg==="J"?"Jacinto":"Charles"}</span></div>`;
+    });
+    zg+=zonasSessaoG.length;
 
-    const totalAtual = votosHenrique + votosAlvaro;
-
-    const pH = ((votosHenrique / totalAtual) * 100).toFixed(2).replace(".",",");
-    const pA = ((votosAlvaro / totalAtual) * 100).toFixed(2).replace(".",",");
-
-    document.getElementById("vHenrique").innerText = fmt(votosHenrique);
-    document.getElementById("vAlvaro").innerText = fmt(votosAlvaro);
-    document.getElementById("pHenrique").innerText = pH;
-    document.getElementById("pAlvaro").innerText = pA;
-    document.getElementById("totalVotos").innerText = fmt(totalAtual);
-
-    // Barra de progresso por zonas
-    document.getElementById("progressBar").style.width =
-        ((zonasApuradas / zonas.length) * 100) + "%";
-
-    // Destaque do líder geral
-    document.getElementById("henrique").classList.remove("lider");
-    document.getElementById("alvaro").classList.remove("lider");
-
-    if(votosHenrique > votosAlvaro){
-        document.getElementById("henrique").classList.add("lider");
-    }else{
-        document.getElementById("alvaro").classList.add("lider");
-    }
-
-    // Encerramento
-    if(sessaoAtual === TOTAL_SESSOES){
-        document.getElementById("status").innerText =
-            "APURAÇÃO ENCERRADA – RESULTADO OFICIAL";
-        document.getElementById("countdown").innerText = "";
+    /* FINAL */
+    if(sessao===35){
+        vpH=4218;vpA=3782;
+        vgC=1273;vgJ=6727;
+        zp=zonasNacionais.length;
+        zg=zonasBH.length;
+        document.getElementById("status").innerText="APURAÇÃO ENCERRADA – RESULTADO OFICIAL";
+        document.getElementById("countdown").innerText="";
         clearInterval(timer);
     }
+
+    /* UPDATE UI */
+    const tp=vpH+vpA, tg=vgC+vgJ;
+    document.getElementById("vpH").innerText=vpH.toLocaleString("pt-BR");
+    document.getElementById("vpA").innerText=vpA.toLocaleString("pt-BR");
+    document.getElementById("ppH").innerText=((vpH/tp)*100).toFixed(2).replace(".",",");
+    document.getElementById("ppA").innerText=((vpA/tp)*100).toFixed(2).replace(".",",");
+    document.getElementById("tp").innerText=tp.toLocaleString("pt-BR");
+
+    document.getElementById("vgC").innerText=vgC.toLocaleString("pt-BR");
+    document.getElementById("vgJ").innerText=vgJ.toLocaleString("pt-BR");
+    document.getElementById("pgC").innerText=((vgC/tg)*100).toFixed(2).replace(".",",");
+    document.getElementById("pgJ").innerText=((vgJ/tg)*100).toFixed(2).replace(".",",");
+    document.getElementById("tg").innerText=tg.toLocaleString("pt-BR");
+
+    document.getElementById("progPres").style.width=(zp/zonasNacionais.length*100)+"%";
+    document.getElementById("progGov").style.width=(zg/zonasBH.length*100)+"%";
+
+    document.getElementById("pHenrique").classList.toggle("lider",vpH>vpA);
+    document.getElementById("pAlvaro").classList.toggle("lider",vpA>vpH);
+    document.getElementById("gCharles").classList.toggle("lider",vgC>vgJ);
+    document.getElementById("gJacinto").classList.toggle("lider",vgJ>vgC);
 }
 
-/* =========================================================
-   CONTROLE AUTOMÁTICO DAS SESSÕES
-   ========================================================= */
-function iniciarApuracao(){
-    atualizarSessao();
-
-    timer = setInterval(()=>{
+/* =====================================================
+   TIMER
+   ===================================================== */
+function iniciar(){
+    atualizar();
+    timer=setInterval(()=>{
         countdown--;
-        document.getElementById("countdown").innerText =
-            `Próxima atualização em: ${countdown}`;
-
-        if(countdown === 0){
-            sessaoAtual++;
-            countdown = 5;
-
-            if(sessaoAtual <= TOTAL_SESSOES){
-                atualizarSessao();
-            }else{
-                clearInterval(timer);
-            }
+        document.getElementById("countdown").innerText=`Próxima atualização em: ${countdown}`;
+        if(countdown===0){
+            sessao++;
+            countdown=5;
+            if(sessao<=35) atualizar();
         }
     },1000);
 }
 
-// Inicialização automática
-iniciarApuracao();
+iniciar();
 </script>
 </body>
 </html>
