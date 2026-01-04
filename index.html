@@ -397,6 +397,27 @@ main {
   margin-bottom: 10px;
 }
 
+  /* Adicione ao final da seção de CSS: */
+.eleito-badge {
+  display: inline-block;
+  background: var(--verde);
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-left: 10px;
+  font-weight: 600;
+}
+
+.card.eleito {
+  border-left-color: var(--ouro);
+  background: linear-gradient(to right, #fefce8, #fef9c3);
+}
+
+.card.eleito.lider {
+  background: linear-gradient(to right, #ecfdf5, #fef9c3);
+}
+
 .nome {
   font-weight: 700;
   font-size: 1.2rem;
@@ -657,7 +678,7 @@ footer {
     <div class="painel" id="painelVer">
       <div class="painel-header">
         <h2><i class="fas fa-user-friends"></i> VEREADOR</h2>
-        <div class="painel-badge">5 Candidatos</div>
+        <div class="painel-badge">9 Candidatos • 5 eleitos</div>
       </div>
       
       <div class="painel-progress">
@@ -734,15 +755,20 @@ const prefeitos = [
   {nome: "Javier Mendonza", numero: 35, votos: 421},
   {nome: "Noah D.", numero: 10, votos: 351},
   {nome: "Henrique Martins", numero: 15, votos: 210},
-  {nome: "Fernando H.", numero: 43, votos: 211}
+  {nome: "Fernando Hauss", numero: 43, votos: 211}
 ];
 
+// Substitua a constante vereadores atual por:
 const vereadores = [
   {nome: "Arthur Albuquerque", numero: 38038, votos: 1924},
   {nome: "Nicollas Camargo", numero: 77400, votos: 1519},
   {nome: "Vitor Henrique", numero: 22222, votos: 1215},
   {nome: "Marcos Fernandes", numero: 50555, votos: 810},
-  {nome: "Henry Farias", numero: 77778, votos: 709}
+  {nome: "Henry Farias", numero: 77778, votos: 709},
+  {nome: "Lucas Junior", numero: 27000, votos: 608},
+  {nome: "Michael Nonato", numero: 45555, votos: 506},
+  {nome: "Thaise Gomes", numero: 11111, votos: 405},
+  {nome: "Renato Santos", numero: 17000, votos: 304}
 ];
 
 // Pesos para simulação de diferentes regiões
@@ -795,9 +821,10 @@ function startCountdown() {
 }
 
 // Atualizar toda a exibição
+// Substitua a função updateDisplay atual por:
 function updateDisplay() {
-  atualizarPainel(prefeitos, "cardsPref", "barPref", "painelPref", "progressPrefText");
-  atualizarPainel(vereadores, "cardsVer", "barVer", "painelVer", "progressVerText");
+  atualizarPainel(prefeitos, "cardsPref", "barPref", "painelPref", "progressPrefText", "prefeito");
+  atualizarPainel(vereadores, "cardsVer", "barVer", "painelVer", "progressVerText", "vereador");
   
   // Atualizar informações gerais
   document.getElementById('sessao').textContent = `Sessão ${sessaoAtual} de ${TOTAL_SESSOES}`;
@@ -825,7 +852,8 @@ function calcularTotalVotos(candidatos, sessao) {
 }
 
 // Atualizar um painel específico
-function atualizarPainel(listaCandidatos, idCards, idBarra, idPainel, idProgressText) {
+// Substitua a função atualizarPainel atual por:
+function atualizarPainel(listaCandidatos, idCards, idBarra, idPainel, idProgressText, cargo) {
   const totalSessao = calcularTotalVotos(listaCandidatos, sessaoAtual);
   const percentualProgresso = (sessaoAtual / TOTAL_SESSOES) * 100;
   
@@ -845,14 +873,25 @@ function atualizarPainel(listaCandidatos, idCards, idBarra, idPainel, idProgress
   // Determinar líder
   const maiorVotos = Math.max(...candidatosOrdenados.map(c => c.votosParciais));
   
+  // Para vereadores, destacar os 5 primeiros como eleitos
+  const eleitos = cargo === 'vereador' ? 5 : 1;
+  
   // Atualizar HTML dos cards
-  const cardsHTML = candidatosOrdenados.map(candidato => {
+  const cardsHTML = candidatosOrdenados.map((candidato, index) => {
     const isLider = candidato.votosParciais === maiorVotos && maiorVotos > 0;
+    const isEleito = index < eleitos && cargo === 'vereador';
+    
+    let classeCard = 'card';
+    if (isLider) classeCard += ' lider';
+    if (isEleito) classeCard += ' eleito';
+    
+    // Adicionar badge para os 5 primeiros (eleitos)
+    const eleitoBadge = isEleito ? '<div class="eleito-badge"><i class="fas fa-check-circle"></i> ELEITO</div>' : '';
     
     return `
-      <div class="card ${isLider ? 'lider' : ''}">
+      <div class="${classeCard}">
         <div class="card-header">
-          <div class="nome">${candidato.nome}</div>
+          <div class="nome">${candidato.nome} ${eleitoBadge}</div>
           <div class="numero">${candidato.numero}</div>
         </div>
         <div class="barra-pct">
@@ -877,6 +916,25 @@ function atualizarPainel(listaCandidatos, idCards, idBarra, idPainel, idProgress
 }
 
 // Finalizar a apuração
+function finaliz// Adicione esta função separada e chame-a quando a apuração estiver completa:
+function marcarEleitos() {
+  if (sessaoAtual === TOTAL_SESSOES) {
+    const cardsVereadores = document.querySelectorAll('#cardsVer .card');
+    cardsVereadores.forEach((card, index) => {
+      if (index < 5) {
+        card.classList.add('eleito');
+        setTimeout(() => {
+          card.style.transform = 'scale(1.03)';
+          setTimeout(() => {
+            card.style.transform = 'scale(1)';
+          }, 300);
+        }, index * 200);
+      }
+    });
+  }
+}
+
+// Chame esta função no final da função finalizarApuracao:
 function finalizarApuracao() {
   apuracaoAtiva = false;
   document.getElementById('status').textContent = "APURAÇÃO ENCERRADA - RESULTADO OFICIAL";
@@ -888,14 +946,17 @@ function finalizarApuracao() {
   sessaoAtual = TOTAL_SESSOES;
   updateDisplay();
   
+  // Marcar os vereadores eleitos com animação
+  setTimeout(marcarEleitos, 500);
+  
   // Mostrar mensagem final
   setTimeout(() => {
     alert("Apuração concluída! Todos os votos foram contabilizados e o resultado final está disponível.");
-  }, 500);
+  }, 1500);
 }
 
-// Controles
-document.getElementById('btnPause').addEventListener('click', function() {
+
+// ControlesmentById('btnPause').addEventListener('click', function() {
   apuracaoAtiva = !apuracaoAtiva;
   
   if (apuracaoAtiva) {
