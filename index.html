@@ -2,334 +2,291 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Tribunal Eleitoral • Apuração Oficial</title>
+<title>Tribunal Eleitoral • 1º Turno Municipal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* =====================================================
-   ESTILO INSTITUCIONAL – TRIBUNAL ELEITORAL
-   ===================================================== */
 :root{
-    --verde:#1f8f4a;
-    --azul:#0b4ea2;
-    --cinza:#f2f4f7;
-    --escuro:#1f2933;
-    --branco:#ffffff;
+  --verde:#1fa463;
+  --azul:#0b4fa3;
+  --ouro:#f5c542;
+  --bg:#f3f5f8;
+  --card:#ffffff;
+  --texto:#1f2933;
 }
 
-*{
-    box-sizing:border-box;
-    font-family: Arial, Helvetica, sans-serif;
-}
+*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
 
 body{
-    margin:0;
-    background:var(--cinza);
-    color:var(--escuro);
+  margin:0;
+  background:var(--bg);
+  color:var(--texto);
 }
 
 header{
-    background:linear-gradient(90deg,var(--azul),var(--verde));
-    color:#fff;
-    padding:16px;
-    text-align:center;
+  background:linear-gradient(90deg,var(--azul),var(--verde));
+  color:#fff;
+  padding:20px;
+  text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.25);
 }
 
-header h1{margin:0;font-size:1.3rem;}
-header p{margin:4px 0 0;font-size:0.9rem;}
+header h1{margin:0;font-size:1.6rem}
+header p{margin:6px 0 0;opacity:.9}
 
 main{
-    max-width:1200px;
-    margin:auto;
-    padding:16px;
+  max-width:1300px;
+  margin:auto;
+  padding:20px;
 }
 
 .status{
-    text-align:center;
-    font-weight:bold;
-    color:var(--azul);
-    margin-bottom:10px;
+  text-align:center;
+  font-weight:bold;
+  color:var(--azul);
+  margin-bottom:6px;
 }
 
 .sessao{
-    text-align:center;
-    font-weight:bold;
+  text-align:center;
+  font-size:1.1rem;
+  font-weight:bold;
 }
 
 .countdown{
-    text-align:center;
-    font-size:1.4rem;
-    color:var(--verde);
-    margin-bottom:16px;
+  text-align:center;
+  font-size:1.5rem;
+  color:var(--verde);
+  margin-bottom:20px;
 }
 
 .painel{
-    background:var(--branco);
-    border-radius:14px;
-    padding:16px;
-    margin-bottom:24px;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+  background:var(--card);
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:30px;
+  box-shadow:0 6px 20px rgba(0,0,0,.12);
+  position:relative;
+  overflow:hidden;
+}
+
+.painel.flash::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle,var(--ouro),transparent 70%);
+  animation:flash .6s ease-out;
+  pointer-events:none;
+}
+
+@keyframes flash{
+  from{opacity:.8}
+  to{opacity:0}
 }
 
 .painel h2{
-    margin:0;
-    color:var(--azul);
+  margin:0;
+  color:var(--azul);
 }
 
-.sub{
-    font-size:0.85rem;
-    opacity:0.75;
-    margin-bottom:10px;
+.sub{opacity:.7;font-size:.9rem;margin-bottom:10px}
+
+.progress{
+  height:16px;
+  background:#ddd;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:14px;
 }
 
-.progress-container{
-    background:#ddd;
-    height:14px;
-    border-radius:10px;
-    overflow:hidden;
-    margin-bottom:12px;
-}
-
-.progress-bar{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,var(--verde),var(--azul));
-    transition:width .4s linear;
+.bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--verde),var(--azul));
+  transition:.4s;
 }
 
 .candidatos{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:14px;
 }
 
 .card{
-    border:2px solid transparent;
-    border-radius:12px;
-    padding:12px;
+  border-radius:14px;
+  padding:14px;
+  border:2px solid transparent;
+  background:#fdfefe;
 }
 
 .card.lider{
-    border-color:var(--verde);
-    background:#f1fbf5;
+  border-color:var(--verde);
+  background:#f0fbf6;
 }
 
-.nome{font-weight:bold;}
-.numero{font-size:.85rem;opacity:.7;}
-.porcentagem{font-size:1.2rem;font-weight:bold;}
+.nome{font-weight:bold}
+.numero{font-size:.85rem;opacity:.7}
+.pct{font-size:1.2rem;font-weight:bold}
 
 .zonas{
-    margin-top:10px;
-    font-size:.9rem;
+  margin-top:14px;
+  font-size:.9rem;
 }
 
 .zona{
-    display:flex;
-    justify-content:space-between;
-    border-bottom:1px solid #eee;
-    padding:4px 0;
+  display:flex;
+  justify-content:space-between;
+  padding:6px 0;
+  border-bottom:1px solid #eee;
 }
 
-.vh{color:var(--verde);font-weight:bold;}
-.va{color:var(--azul);font-weight:bold;}
+.zona span:last-child{font-weight:bold}
 
-@media(min-width:700px){
-    .candidatos{flex-direction:row;}
+@media(min-width:900px){
+  .duplo{display:grid;grid-template-columns:1fr 1fr;gap:26px}
 }
 </style>
 </head>
 
 <body>
 <header>
-    <h1>Tribunal Eleitoral</h1>
-    <p>2º Turno • Apuração Oficial</p>
+  <h1>Tribunal Eleitoral Municipal</h1>
+  <p>1º Turno • Apuração Oficial</p>
 </header>
 
 <main>
-    <div id="status" class="status">Apuração em andamento</div>
-    <div id="sessao" class="sessao">Sessão 1 de 35</div>
-    <div id="countdown" class="countdown">Próxima atualização em: 5</div>
+<div class="status" id="status">Apuração em andamento</div>
+<div class="sessao" id="sessao">Sessão 1 de 50</div>
+<div class="countdown" id="countdown">Próxima atualização em: 5</div>
 
-    <!-- PRESIDENTE -->
-    <div class="painel">
-        <h2>PRESIDENTE</h2>
-        <div class="sub">Apuração nacional</div>
-        <div class="progress-container"><div id="progPres" class="progress-bar"></div></div>
+<div class="duplo">
 
-        <div class="candidatos">
-            <div id="pH" class="card">
-                <div class="nome">Henrique C.</div>
-                <div class="numero">44</div>
-                <div>Votos: <span id="vpH">0</span></div>
-                <div class="porcentagem"><span id="ppH">0,00</span>%</div>
-            </div>
-            <div id="pA" class="card">
-                <div class="nome">Álvaro A.</div>
-                <div class="numero">55</div>
-                <div>Votos: <span id="vpA">0</span></div>
-                <div class="porcentagem"><span id="ppA">0,00</span>%</div>
-            </div>
-        </div>
+<!-- PREFEITO -->
+<div class="painel" id="painelPref">
+<h2>PREFEITO</h2>
+<div class="sub">Eleição municipal • Apuração por zonas</div>
+<div class="progress"><div class="bar" id="barPref"></div></div>
 
-        <div>Total de votos: <span id="tp">0</span></div>
-        <div id="zonasPres" class="zonas"></div>
-    </div>
+<div class="candidatos" id="cardsPref"></div>
+<div>Total de votos: <strong id="tp">0</strong></div>
+<div class="zonas" id="zonasPref"></div>
+</div>
 
-    <!-- GOVERNADOR -->
-    <div class="painel">
-        <h2>GOVERNADOR – Brookhaven</h2>
-        <div class="sub">Somente zonas BH</div>
-        <div class="progress-container"><div id="progGov" class="progress-bar"></div></div>
+<!-- VEREADOR -->
+<div class="painel" id="painelVer">
+<h2>VEREADOR</h2>
+<div class="sub">Os 5 mais votados entram na Câmara</div>
+<div class="progress"><div class="bar" id="barVer"></div></div>
 
-        <div class="candidatos">
-            <div id="gC" class="card">
-                <div class="nome">Charles R.</div>
-                <div class="numero">45</div>
-                <div>Votos: <span id="vgC">0</span></div>
-                <div class="porcentagem"><span id="pgC">0,00</span>%</div>
-            </div>
-            <div id="gJ" class="card">
-                <div class="nome">Jacinto L.</div>
-                <div class="numero">44</div>
-                <div>Votos: <span id="vgJ">0</span></div>
-                <div class="porcentagem"><span id="pgJ">0,00</span>%</div>
-            </div>
-        </div>
+<div class="candidatos" id="cardsVer"></div>
+<div>Total de votos: <strong id="tv">0</strong></div>
+<div class="zonas" id="zonasVer"></div>
+</div>
 
-        <div>Total de votos: <span id="tg">0</span></div>
-        <div id="zonasGov" class="zonas"></div>
-    </div>
+</div>
 </main>
 
 <script>
-/* =====================================================
-   DADOS FIXOS E CONFIGURAÇÃO
-   ===================================================== */
-const TOTAL_SESSOES = 35;
+const SESSOES = 50;
+let sessao=1, cd=5, timer;
+let ultimoLiderPref="", ultimoLiderVer="";
 
-// PRESIDENTE
-const FINAL_PRES = {H:4218, A:3782};
-const TOTAL_PRES = 8000;
-
-// GOVERNADOR
-const FINAL_GOV = {C:1273, J:6727};
-const TOTAL_GOV = 8000;
-
-// ZONAS
-const zonasBH = Array.from({length:14},(_,i)=>"BH-"+String(i+1).padStart(2,"0"));
-const zonasNacionais = [
-    ...zonasBH,
-    ...Array.from({length:11},(_,i)=>"NC-"+String(i+1).padStart(2,"0")),
-    ...Array.from({length:12},(_,i)=>"CT-"+String(i+1).padStart(2,"0")),
-    ...Array.from({length:10},(_,i)=>"FM-"+String(i+1).padStart(2,"0")),
-    ...Array.from({length:14},(_,i)=>"FX-"+String(i+1).padStart(2,"0"))
+/* ===== RESULTADOS FINAIS FIXOS ===== */
+const prefeitos = [
+ {n:"Rodrigo Manga",num:28,v:4000},
+ {n:"Ryan Everton",num:22,v:1684},
+ {n:"Arthur Silva",num:17,v:632},
+ {n:"Gabriel Arraes",num:77,v:491},
+ {n:"Javier Mendonza",num:35,v:421},
+ {n:"Noah D.",num:10,v:351},
+ {n:"Henrique Martins",num:15,v:210},
+ {n:"Fernando H.",num:43,v:211},
 ];
 
-// Distribuição EXATA de zonas por sessão
-const zonasPresPorSessao = [];
-let idx = 0;
-for(let s=1;s<=TOTAL_SESSOES;s++){
-    const qtd = s<35 ? Math.floor(zonasNacionais.length/TOTAL_SESSOES) : zonasNacionais.length-idx;
-    zonasPresPorSessao.push(zonasNacionais.slice(idx, idx+qtd));
-    idx+=qtd;
+const vereadores = [
+ {n:"Arthur Albuquerque",num:38038,v:1924},
+ {n:"Nicollas Camargo",num:77400,v:1519},
+ {n:"Vitor Henrique",num:22222,v:1215},
+ {n:"Marcos Fernandes",num:50555,v:810},
+ {n:"Henry Farias",num:77778,v:709},
+ {n:"Lucas Junior",num:27000,v:608},
+ {n:"Michael Nonato",num:45555,v:506},
+ {n:"Thaise Gomes",num:11111,v:405},
+ {n:"Renato Santos",num:17000,v:304},
+];
+
+const totalPref = 8000;
+const totalVer  = 8000;
+
+const zonas = Array.from({length:50},(_,i)=>"Zona "+(i+1));
+
+/* ===== FUNÇÕES ===== */
+function embaralhar(arr){
+ return [...arr].sort(()=>Math.random()-0.5);
 }
-const zonasGovPorSessao = [];
-let idxg = 0;
-for(let s=1;s<=TOTAL_SESSOES;s++){
-    const qtd = s<=14 ? 1 : 0;
-    zonasGovPorSessao.push(zonasBH.slice(idxg, idxg+qtd));
-    idxg+=qtd;
+
+function atualizarPainel(lista, total, cardsId, zonasId, painelId){
+ let soma = Math.round(total*(sessao/SESSOES));
+ let acumulado = 0;
+ let cards="";
+
+ lista.forEach(c=>{
+   let parcial = sessao===SESSOES ? c.v : Math.round(c.v*(sessao/SESSOES));
+   acumulado+=parcial;
+   cards+=`
+   <div class="card ${parcial===Math.max(...lista.map(x=>Math.round(x.v*(sessao/SESSOES))))?'lider':''}">
+     <div class="nome">${c.n}</div>
+     <div class="numero">${c.num}</div>
+     <div>🗳 ${parcial.toLocaleString("pt-BR")}</div>
+     <div class="pct">${((parcial/acumulado)*100||0).toFixed(2).replace(".",",")}%</div>
+   </div>`;
+ });
+
+ document.getElementById(cardsId).innerHTML=cards;
+ document.getElementById(zonasId).innerHTML="<strong>Zonas apuradas:</strong>";
+
+ embaralhar(lista).slice(0,3).forEach((c,i)=>{
+   document.getElementById(zonasId).innerHTML+=`
+   <div class="zona">
+     <span>${zonas[(sessao+i)%zonas.length]}</span>
+     <span>${c.n}</span>
+   </div>`;
+ });
+
+ document.getElementById(painelId).classList.add("flash");
+ setTimeout(()=>document.getElementById(painelId).classList.remove("flash"),600);
+
+ return acumulado;
 }
 
-// Regras de liderança
-const liderPres = s => s<=15?"A":s<=30?"H":s<=34?"A":"H";
-const liderGov  = s => s<=10?"C":s<=25?"J":s<=33?"C":"J";
-
-// Estado
-let sessao=1,countdown=5,timer;
-let vpH=0,vpA=0,vgC=0,vgJ=0;
-let zp=0,zg=0;
-
-// =====================================================
 function atualizar(){
-    document.getElementById("sessao").innerText=`Sessão ${sessao} de ${TOTAL_SESSOES}`;
+ document.getElementById("sessao").innerText=`Sessão ${sessao} de ${SESSOES}`;
 
-    /* PRESIDENTE */
-    const lp = liderPres(sessao);
-    const zonasP = zonasPresPorSessao[sessao-1];
-    const listaP = document.getElementById("zonasPres");
-    listaP.innerHTML="<strong>Zonas apuradas:</strong>";
+ let tp = atualizarPainel(prefeitos,totalPref,"cardsPref","zonasPref","painelPref");
+ let tv = atualizarPainel(vereadores,totalVer,"cardsVer","zonasVer","painelVer");
 
-    zonasP.forEach(z=>{
-        const v = Math.round(TOTAL_PRES/zonasNacionais.length);
-        if(lp==="H"){vpH+=Math.round(v*0.55);vpA+=v-Math.round(v*0.55);}
-        else{vpA+=Math.round(v*0.55);vpH+=v-Math.round(v*0.55);}
-        listaP.innerHTML+=`<div class="zona"><span>${z}</span><span class="${lp==="H"?"vh":"va"}">${lp==="H"?"Henrique":"Álvaro"}</span></div>`;
-    });
-    zp+=zonasP.length;
+ document.getElementById("tp").innerText=tp.toLocaleString("pt-BR");
+ document.getElementById("tv").innerText=tv.toLocaleString("pt-BR");
+ document.getElementById("barPref").style.width=(sessao/SESSOES*100)+"%";
+ document.getElementById("barVer").style.width=(sessao/SESSOES*100)+"%";
 
-    /* GOVERNADOR */
-    const lg = liderGov(sessao);
-    const zonasG = zonasGovPorSessao[sessao-1];
-    const listaG = document.getElementById("zonasGov");
-    listaG.innerHTML="<strong>Zonas apuradas:</strong>";
-
-    zonasG.forEach(z=>{
-        const v = Math.round(TOTAL_GOV/zonasBH.length);
-        if(lg==="J"){vgJ+=Math.round(v*0.85);vgC+=v-Math.round(v*0.85);}
-        else{vgC+=Math.round(v*0.55);vgJ+=v-Math.round(v*0.55);}
-        listaG.innerHTML+=`<div class="zona"><span>${z}</span><span class="${lg==="J"?"vh":"va"}">${lg==="J"?"Jacinto":"Charles"}</span></div>`;
-    });
-    zg+=zonasG.length;
-
-    /* FINAL FORÇADO */
-    if(sessao===35){
-        vpH=FINAL_PRES.H; vpA=FINAL_PRES.A;
-        vgC=FINAL_GOV.C;  vgJ=FINAL_GOV.J;
-        zp=zonasNacionais.length; zg=zonasBH.length;
-        document.getElementById("status").innerText="APURAÇÃO ENCERRADA – RESULTADO OFICIAL";
-        document.getElementById("countdown").innerText="";
-        clearInterval(timer);
-    }
-
-    /* UI */
-    const tp=vpH+vpA, tg=vgC+vgJ;
-    document.getElementById("vpH").innerText=vpH.toLocaleString("pt-BR");
-    document.getElementById("vpA").innerText=vpA.toLocaleString("pt-BR");
-    document.getElementById("ppH").innerText=((vpH/tp)*100).toFixed(2).replace(".",",");
-    document.getElementById("ppA").innerText=((vpA/tp)*100).toFixed(2).replace(".",",");
-    document.getElementById("tp").innerText=tp.toLocaleString("pt-BR");
-
-    document.getElementById("vgC").innerText=vgC.toLocaleString("pt-BR");
-    document.getElementById("vgJ").innerText=vgJ.toLocaleString("pt-BR");
-    document.getElementById("pgC").innerText=((vgC/tg)*100).toFixed(2).replace(".",",");
-    document.getElementById("pgJ").innerText=((vgJ/tg)*100).toFixed(2).replace(".",",");
-    document.getElementById("tg").innerText=tg.toLocaleString("pt-BR");
-
-    document.getElementById("progPres").style.width=(zp/zonasNacionais.length*100)+"%";
-    document.getElementById("progGov").style.width=(zg/zonasBH.length*100)+"%";
-
-    document.getElementById("pH").classList.toggle("lider",vpH>vpA);
-    document.getElementById("pA").classList.toggle("lider",vpA>vpH);
-    document.getElementById("gC").classList.toggle("lider",vgC>vgJ);
-    document.getElementById("gJ").classList.toggle("lider",vgJ>vgC);
+ if(sessao===SESSOES){
+   document.getElementById("status").innerText="APURAÇÃO ENCERRADA – 2º TURNO CONFIRMADO";
+   clearInterval(timer);
+ }
 }
 
-// =====================================================
-function iniciar(){
-    atualizar();
-    timer=setInterval(()=>{
-        countdown--;
-        document.getElementById("countdown").innerText=`Próxima atualização em: ${countdown}`;
-        if(countdown===0){
-            sessao++;
-            countdown=5;
-            if(sessao<=TOTAL_SESSOES) atualizar();
-        }
-    },1000);
-}
+timer=setInterval(()=>{
+ cd--;
+ document.getElementById("countdown").innerText=`Próxima atualização em: ${cd}`;
+ if(cd===0){
+   sessao++;
+   cd=5;
+   if(sessao<=SESSOES) atualizar();
+ }
+},1000);
 
-iniciar();
+atualizar();
 </script>
 </body>
 </html>
