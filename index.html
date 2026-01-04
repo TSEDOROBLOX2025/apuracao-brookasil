@@ -2,750 +2,473 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Apuração Eleitoral • 1º Turno Municipal</title>
+<title>Apuração Eleitoral • Tempo Real</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
+/* --- CONFIGURAÇÕES GERAIS E VARIÁVEIS --- */
 :root {
-  --verde: #16a34a;
-  --verde-escuro: #15803d;
-  --azul: #0b4fa3;
-  --azul-escuro: #0c3a7a;
-  --ouro: #ffd700;
-  --ouro-escuro: #cca300;
-  --cinza-claro: #f8fafc;
-  --cinza-medio: #e2e8f0;
-  --cinza-escuro: #64748b;
-  --branco: #ffffff;
-  --preto: #111827;
-  --bg: #f1f5f9;
-  --card: #ffffff;
-  --texto: #1e293b;
-  --sombra: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --sombra-forte: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
-  --borda: 1px solid #e2e8f0;
+  --verde: #10b981;
+  --verde-glow: rgba(16, 185, 129, 0.5);
+  --azul: #2563eb;
+  --azul-escuro: #1e40af;
+  --ouro: #fbbf24;
+  --vermelho: #ef4444;
+  --vermelho-escuro: #991b1b;
+  --bg-body: #f3f4f6;
+  --card-bg: #ffffff;
+  --texto-principal: #111827;
+  --texto-secundario: #6b7280;
+  --sombra-suave: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --sombra-forte: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --gradient-header: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
 }
 
-* {
-  box-sizing: border-box;
-  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
+* { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; outline: none; }
 
 body {
-  background: var(--bg);
-  color: var(--texto);
-  line-height: 1.6;
+  background-color: var(--bg-body);
+  color: var(--texto-principal);
   min-height: 100vh;
-  overflow-x: hidden;
+  padding-bottom: 40px;
 }
 
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* Header melhorado */
+/* --- HEADER --- */
 header {
-  background: linear-gradient(135deg, var(--azul), var(--azul-escuro));
-  color: var(--branco);
-  padding: 28px 0;
+  background: var(--gradient-header);
+  color: white;
+  padding: 20px 0;
   box-shadow: var(--sombra-forte);
   position: relative;
-  overflow: hidden;
+  z-index: 10;
 }
 
-header::before {
-  content: "";
+header::after {
+  content: '';
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
-  right: 0;
+  width: 100%;
   height: 4px;
   background: linear-gradient(90deg, var(--verde), var(--ouro), var(--verde));
+  animation: shimmerBorder 2s infinite linear;
+  background-size: 200% 100%;
 }
+
+@keyframes shimmerBorder { 0% { background-position: 100% 0; } 100% { background-position: -100% 0; } }
+
+.container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
 
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
   gap: 15px;
 }
 
-.logo-icon {
-  font-size: 2.5rem;
-  color: var(--ouro);
-}
+.logo { display: flex; align-items: center; gap: 15px; }
+.logo i { font-size: 2.2rem; color: var(--ouro); filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.4)); }
+.logo h1 { font-size: 1.5rem; font-weight: 800; line-height: 1.2; }
+.logo p { font-size: 0.85rem; opacity: 0.9; font-weight: 400; letter-spacing: 0.5px; text-transform: uppercase; }
 
-.logo-text h1 {
-  font-size: 1.8rem;
-  margin-bottom: 5px;
-  font-weight: 800;
-}
+.header-controls { display: flex; gap: 10px; }
 
-.logo-text p {
-  font-size: 1rem;
-  opacity: 0.9;
-  font-weight: 400;
-}
-
-.header-controls {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-}
-
-.control-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 10px 20px;
+.btn {
+  border: none;
+  padding: 10px 16px;
   border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  transition: all 0.2s;
+  font-size: 0.9rem;
 }
 
-.control-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+.btn-glass {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Main content */
-main {
-  padding: 30px 0;
+.btn-glass:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--vermelho), var(--vermelho-escuro));
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
 }
 
-/* Status section */
-.status-container {
-  background: var(--branco);
+.btn-danger:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6); }
+
+/* --- PAINEL DE STATUS --- */
+.status-bar {
+  background: white;
+  margin-top: -30px;
   border-radius: 16px;
-  padding: 25px;
-  box-shadow: var(--sombra);
-  margin-bottom: 30px;
+  padding: 20px 30px;
+  box-shadow: var(--sombra-forte);
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
   gap: 20px;
-  border: var(--borda);
+  position: relative;
+  z-index: 5;
+  border: 1px solid rgba(0,0,0,0.05);
 }
 
-.status-content {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-}
+.status-left { display: flex; flex-direction: column; gap: 5px; }
 
-.status {
-  display: flex;
+.badge-status {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-}
-
-.status-indicator {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: var(--verde);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
-  70% { box-shadow: 0 0 0 10px rgba(22, 163, 74, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
-}
-
-.status-text {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--azul);
-}
-
-.sessao {
-  font-size: 1.1rem;
-  color: var(--cinza-escuro);
-  font-weight: 500;
-}
-
-.countdown-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: var(--cinza-claro);
-  padding: 15px 25px;
-  border-radius: 12px;
-  min-width: 150px;
-}
-
-.countdown-label {
-  font-size: 0.9rem;
-  color: var(--cinza-escuro);
-  margin-bottom: 5px;
-  font-weight: 500;
-}
-
-.countdown {
-  font-size: 2.5rem;
-  font-weight: 800;
+  gap: 8px;
+  background: #ecfdf5;
   color: var(--verde);
-  line-height: 1;
-}
-
-.progress-summary {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 15px;
-  padding-top: 15px;
-  border-top: var(--borda);
-}
-
-.progress-item {
-  text-align: center;
-  flex: 1;
-}
-
-.progress-value {
-  font-size: 1.4rem;
+  padding: 6px 12px;
+  border-radius: 20px;
   font-weight: 700;
-  color: var(--azul);
-}
-
-.progress-label {
   font-size: 0.9rem;
-  color: var(--cinza-escuro);
+  width: fit-content;
 }
 
-/* Grid layout */
-.grid {
+.dot { width: 8px; height: 8px; background: var(--verde); border-radius: 50%; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); animation: pulseDot 1.5s infinite; }
+
+@keyframes pulseDot { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+
+.sessao-info { color: var(--texto-secundario); font-size: 0.9rem; font-weight: 500; }
+
+.countdown-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f8fafc;
+  padding: 10px 25px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s;
+}
+
+.countdown-box.tenso {
+  border-color: var(--vermelho);
+  background: #fef2f2;
+  animation: tenso 0.8s ease-in-out infinite;
+}
+
+.countdown-number { font-size: 2.2rem; font-weight: 900; color: var(--azul); line-height: 1; font-variant-numeric: tabular-nums; }
+.countdown-label { font-size: 0.75rem; color: var(--texto-secundario); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 4px; }
+
+.stats-grid { display: flex; gap: 30px; text-align: center; }
+.stat-item h3 { font-size: 1.2rem; font-weight: 800; color: var(--texto-principal); }
+.stat-item p { font-size: 0.8rem; color: var(--texto-secundario); }
+
+/* --- GRID DE APURAÇÃO --- */
+.main-grid {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 30px;
+  margin-top: 40px;
 }
 
-@media (min-width: 992px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-/* Painéis */
 .painel {
-  background: var(--card);
+  background: white;
   border-radius: 20px;
   padding: 25px;
-  box-shadow: var(--sombra);
+  box-shadow: var(--sombra-suave);
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: transform 0.3s, box-shadow 0.3s;
   position: relative;
   overflow: hidden;
-  border: var(--borda);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.painel:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--sombra-forte);
-}
+.painel:hover { transform: translateY(-5px); box-shadow: var(--sombra-forte); }
 
+/* Efeito de Flash (Atualização) */
 .painel.flash::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(255, 215, 0, 0.3), transparent 70%);
-  animation: flash 0.8s ease-out;
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.2) 0%, transparent 70%);
+  animation: flashEffect 0.6s ease-out;
   pointer-events: none;
 }
+@keyframes flashEffect { from { opacity: 1; } to { opacity: 0; } }
 
-@keyframes flash {
-  from { opacity: 1; }
-  to { opacity: 0; }
-}
+.painel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #f3f4f6; padding-bottom: 15px; }
+.painel-header h2 { font-size: 1.4rem; color: var(--azul-escuro); font-weight: 800; display: flex; align-items: center; gap: 10px; }
+.painel-tag { background: #eff6ff; color: var(--azul); padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; }
 
-.painel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.painel-header h2 {
-  font-size: 1.6rem;
-  color: var(--azul);
-  font-weight: 800;
-  margin: 0;
-}
-
-.painel-badge {
-  background: var(--azul);
-  color: white;
-  padding: 5px 15px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.painel-progress {
-  margin-bottom: 25px;
-}
-
-.progress-info {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-size: 0.95rem;
-  color: var(--cinza-escuro);
-}
-
-.progress-bar {
-  height: 14px;
-  background: var(--cinza-medio);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.progress-fill {
+.progress-area { margin-bottom: 25px; }
+.progress-labels { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--texto-secundario); margin-bottom: 8px; font-weight: 600; }
+.bar-bg { height: 12px; background: #e5e7eb; border-radius: 10px; overflow: hidden; }
+.bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--verde), var(--azul));
+  background: linear-gradient(90deg, var(--azul), var(--verde));
   border-radius: 10px;
-  transition: width 0.8s ease;
+  width: 0%;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
-
-.progress-fill::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  animation: shimmer 2s infinite;
+.bar-fill::after {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+  background-size: 1rem 1rem;
+  animation: stripemove 1s linear infinite;
 }
+@keyframes stripemove { from { background-position: 0 0; } to { background-position: 1rem 1rem; } }
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-/* Cards de candidatos */
-.candidatos-container {
-  max-height: 500px;
-  overflow-y: auto;
-  padding-right: 10px;
-}
-
-.candidatos-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.candidatos-container::-webkit-scrollbar-track {
-  background: var(--cinza-claro);
-  border-radius: 4px;
-}
-
-.candidatos-container::-webkit-scrollbar-thumb {
-  background: var(--cinza-escuro);
-  border-radius: 4px;
-}
+/* --- CARDS DE CANDIDATOS --- */
+.lista-candidatos { max-height: 550px; overflow-y: auto; padding-right: 5px; display: flex; flex-direction: column; gap: 12px; }
+.lista-candidatos::-webkit-scrollbar { width: 6px; }
+.lista-candidatos::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
 .card {
-  background: var(--cinza-claro);
-  border-radius: 14px;
-  padding: 18px;
-  margin-bottom: 15px;
-  border-left: 5px solid transparent;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.card:hover {
-  transform: translateX(5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-}
-
-.card.lider {
-  border-color: var(--verde);
-  background: linear-gradient(to right, #ecfdf5, #f0fdf9);
-  animation: pulse-lider 2s ease-in-out infinite;
-}
-
-@keyframes pulse-lider {
-  0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
-  70% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 10px;
-}
-
-  /* Adicione ao final da seção de CSS: */
-.eleito-badge {
-  display: inline-block;
-  background: var(--verde);
-  color: white;
-  font-size: 0.7rem;
-  padding: 3px 8px;
+  background: #f8fafc;
   border-radius: 12px;
-  margin-left: 10px;
-  font-weight: 600;
+  padding: 15px;
+  border: 1px solid #e2e8f0;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+.card:hover { border-color: var(--azul); transform: scale(1.02); }
+
+/* Estilo Líder */
+.card.lider {
+  background: linear-gradient(to right, #ffffff, #f0fdf4);
+  border: 1px solid var(--verde);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+.card.lider .pct-bar-fill { background: var(--verde); }
+
+/* Estilo Eleito */
 .card.eleito {
-  border-left-color: var(--ouro);
-  background: linear-gradient(to right, #fefce8, #fef9c3);
+  background: linear-gradient(to right, #fffbeb, #fef3c7);
+  border: 2px solid var(--ouro);
+}
+.card.eleito::before {
+  content: "ELEITO";
+  position: absolute;
+  top: -10px;
+  right: 15px;
+  background: var(--ouro);
+  color: #78350f;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 2;
 }
 
-.card.eleito.lider {
-  background: linear-gradient(to right, #ecfdf5, #fef9c3);
-}
+.card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.nome-cand { font-weight: 700; font-size: 1.05rem; color: var(--texto-principal); }
+.num-cand { background: var(--texto-principal); color: white; padding: 2px 8px; border-radius: 6px; font-weight: 700; font-size: 0.85rem; }
 
-.nome {
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: var(--preto);
-  margin-right: 10px;
-}
+.card-stats { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; margin-top: 8px; }
+.votos-num { color: var(--texto-secundario); display: flex; align-items: center; gap: 5px; }
+.pct-num { color: var(--texto-principal); font-size: 1.1rem; }
 
-.numero {
-  background: var(--azul);
-  color: white;
-  padding: 3px 12px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  min-width: 60px;
-  text-align: center;
-}
+.pct-bar-bg { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+.pct-bar-fill { height: 100%; background: var(--azul); border-radius: 4px; transition: width 0.8s ease; width: 0%; }
 
-.barra-pct {
-  height: 10px;
-  background: var(--cinza-medio);
-  border-radius: 6px;
-  overflow: hidden;
-  margin: 12px 0;
-}
+/* --- MODAL --- */
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); z-index: 100; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
+.modal.active { display: flex; opacity: 1; }
+.modal-content { background: white; width: 90%; max-width: 500px; padding: 30px; border-radius: 20px; position: relative; transform: scale(0.9); transition: transform 0.3s; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+.modal.active .modal-content { transform: scale(1); }
+.close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; background: none; border: none; cursor: pointer; color: var(--texto-secundario); }
 
-.barra-pct span {
-  display: block;
-  height: 100%;
-  background: linear-gradient(90deg, var(--verde), var(--azul));
-  border-radius: 6px;
-  transition: width 0.8s ease;
-}
-
-.card-info {
+/* --- NOTIFICAÇÃO DE REVIRAVOLTA --- */
+.notificacao-reviravolta {
+  position: fixed;
+  top: 100px;
+  right: -400px; /* Escondido */
+  background: white;
+  width: 350px;
+  border-left: 6px solid var(--vermelho);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  z-index: 9999;
   display: flex;
-  justify-content: space-between;
-  font-weight: 600;
-  font-size: 0.95rem;
+  align-items: flex-start;
+  gap: 15px;
+  transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
-.votos {
-  color: var(--azul);
-}
+.notificacao-reviravolta.show { right: 20px; }
+.not-icon { font-size: 1.8rem; color: var(--vermelho); }
+.not-content h4 { color: var(--vermelho); font-weight: 800; margin-bottom: 5px; text-transform: uppercase; font-size: 0.9rem; }
+.not-content p { font-size: 0.9rem; color: var(--texto-principal); line-height: 1.4; }
 
-.percentual {
-  color: var(--verde-escuro);
-}
+/* --- ANIMAÇÕES DE REVIRAVOLTA --- */
+@keyframes tenso { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes piscarTela { 0%, 100% { opacity: 0; } 50% { opacity: 0.2; } }
+@keyframes pulseLider { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+
+.overlay-flash { position: fixed; inset: 0; pointer-events: none; z-index: 9998; opacity: 0; }
 
 /* Footer */
-footer {
-  background: var(--azul-escuro);
-  color: white;
-  padding: 25px 0;
-  margin-top: 40px;
-  text-align: center;
-}
+footer { text-align: center; color: var(--texto-secundario); padding: 40px 0; font-size: 0.9rem; margin-top: auto; }
 
-.footer-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
-
-.footer-logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.footer-text {
-  opacity: 0.8;
-  font-size: 0.95rem;
-  max-width: 800px;
-  line-height: 1.6;
-}
-
-/* Modal de informações */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
-
-.modal-content {
-  background: white;
-  border-radius: 16px;
-  padding: 30px;
-  max-width: 600px;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.modal-header h3 {
-  font-size: 1.5rem;
-  color: var(--azul);
-}
-
-.close-modal {
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  color: var(--cinza-escuro);
-  cursor: pointer;
-  line-height: 1;
-}
-
-.modal-body {
-  line-height: 1.6;
-}
-
-/* Responsividade */
+/* Responsivo */
 @media (max-width: 768px) {
-  .header-content {
-    flex-direction: column;
-    text-align: center;
-    gap: 15px;
-  }
-  
-  .status-container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .countdown-container {
-    align-self: stretch;
-    align-items: center;
-  }
-  
-  .progress-summary {
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .card-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-  
-  .numero {
-    align-self: flex-start;
-  }
-}
-
-/* Animações extras */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.painel {
-  animation: fadeIn 0.5s ease-out;
-}
-
-.card {
-  animation: fadeIn 0.6s ease-out;
+  .header-content { justify-content: center; text-align: center; }
+  .status-bar { flex-direction: column; text-align: center; gap: 20px; }
+  .stats-grid { width: 100%; justify-content: space-around; }
+  .main-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 
 <body>
+
+<div id="flashOverlay" class="overlay-flash"></div>
+
 <header>
   <div class="container header-content">
     <div class="logo">
-      <div class="logo-icon">
-        <i class="fas fa-vote-yea"></i>
-      </div>
-      <div class="logo-text">
-        <h1>Tribunal Eleitoral Municipal</h1>
-        <p>1º Turno • Apuração Oficial</p>
+      <i class="fas fa-vote-yea"></i>
+      <div>
+        <h1>Apuração 2026</h1>
+        <p>Tribunal Eleitoral Municipal</p>
       </div>
     </div>
-    
     <div class="header-controls">
-      <button class="control-btn" id="btnPause">
-        <i class="fas fa-pause"></i> Pausar
+      <button class="btn btn-glass" id="btnPause">
+        <i class="fas fa-pause"></i> <span>Pausar</span>
       </button>
-      <button class="control-btn" id="btnInfo">
-        <i class="fas fa-info-circle"></i> Informações
+      <button class="btn btn-glass" id="btnInfo">
+        <i class="fas fa-info-circle"></i> Info
+      </button>
+      <button class="btn btn-danger" id="btnReviravolta">
+        <i class="fas fa-bolt"></i> Reviravolta!
       </button>
     </div>
   </div>
 </header>
 
-<main class="container">
-  <div class="status-container">
-    <div class="status-content">
-      <div class="status">
-        <div class="status-indicator"></div>
-        <div class="status-text" id="status">Apuração em andamento</div>
+<div class="container">
+  <div class="status-bar">
+    <div class="status-left">
+      <div class="badge-status">
+        <div class="dot"></div>
+        <span id="statusText">EM ANDAMENTO</span>
       </div>
-      <div class="sessao" id="sessao">Sessão 1 de 50</div>
+      <div class="sessao-info" id="sessaoInfo">Sessão 1 de 50 apurada</div>
     </div>
-    
-    <div class="countdown-container">
-      <div class="countdown-label">Próxima atualização</div>
-      <div class="countdown" id="countdown">5</div>
+
+    <div class="countdown-box" id="countdownBox">
+      <div class="countdown-label">Atualizando em</div>
+      <div class="countdown-number" id="countdown">5</div>
     </div>
-    
-    <div class="progress-summary">
-      <div class="progress-item">
-        <div class="progress-value" id="totalUrnas">1%</div>
-        <div class="progress-label">Urnas apuradas</div>
+
+    <div class="stats-grid">
+      <div class="stat-item">
+        <h3 id="totalUrnas">0%</h3>
+        <p>Urnas</p>
       </div>
-      <div class="progress-item">
-        <div class="progress-value" id="totalVotos">6,802</div>
-        <div class="progress-label">Total de votos</div>
+      <div class="stat-item">
+        <h3 id="totalVotos">0</h3>
+        <p>Votos</p>
       </div>
-      <div class="progress-item">
-        <div class="progress-value" id="horaAtual">00:00</div>
-        <div class="progress-label">Horário da apuração</div>
+      <div class="stat-item">
+        <h3 id="horaAtual">--:--</h3>
+        <p>Horário</p>
       </div>
     </div>
   </div>
 
-  <div class="grid">
+  <div class="main-grid">
     <div class="painel" id="painelPref">
       <div class="painel-header">
         <h2><i class="fas fa-landmark"></i> PREFEITO</h2>
-        <div class="painel-badge">8 Candidatos</div>
+        <span class="painel-tag">1 Vaga</span>
       </div>
       
-      <div class="painel-progress">
-        <div class="progress-info">
-          <span>Progresso da apuração</span>
-          <span id="progressPrefText">2%</span>
+      <div class="progress-area">
+        <div class="progress-labels">
+          <span>Apuração</span>
+          <span id="progressoPrefTxt">0%</span>
         </div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="barPref"></div>
+        <div class="bar-bg">
+          <div class="bar-fill" id="barPref"></div>
         </div>
       </div>
       
-      <div class="candidatos-container" id="cardsPref"></div>
+      <div class="lista-candidatos" id="cardsPref">
+        </div>
     </div>
 
     <div class="painel" id="painelVer">
       <div class="painel-header">
-        <h2><i class="fas fa-user-friends"></i> VEREADOR</h2>
-        <div class="painel-badge">9 Candidatos • 5 eleitos</div>
+        <h2><i class="fas fa-users"></i> VEREADOR</h2>
+        <span class="painel-tag">5 Vagas</span>
       </div>
       
-      <div class="painel-progress">
-        <div class="progress-info">
-          <span>Progresso da apuração</span>
-          <span id="progressVerText">2%</span>
+      <div class="progress-area">
+        <div class="progress-labels">
+          <span>Apuração</span>
+          <span id="progressoVerTxt">0%</span>
         </div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="barVer"></div>
+        <div class="bar-bg">
+          <div class="bar-fill" id="barVer"></div>
         </div>
       </div>
       
-      <div class="candidatos-container" id="cardsVer"></div>
-    </div>
-  </div>
-</main>
-
-<footer>
-  <div class="container footer-content">
-    <div class="footer-logo">
-      <i class="fas fa-shield-alt"></i>
-      <span>Sistema Seguro de Apuração</span>
-    </div>
-    <div class="footer-text">
-      Esta é uma simulação de apuração eleitoral. Os dados são fictícios e servem apenas para demonstração.
-      Atualizações automáticas a cada 5 segundos. Última atualização: <span id="lastUpdate">--:--:--</span>
-    </div>
-  </div>
-</footer>
-
-<!-- Modal de informações -->
-<div class="modal" id="infoModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h3><i class="fas fa-info-circle"></i> Sobre esta Apuração</h3>
-      <button class="close-modal" id="closeModal">&times;</button>
-    </div>
-    <div class="modal-body">
-      <p>Esta é uma simulação interativa de apuração eleitoral para o 1º turno das eleições municipais.</p>
-      
-      <h4>Como funciona:</h4>
-      <ul>
-        <li>A apuração simula a contagem de votos de 50 seções eleitorais</li>
-        <li>Cada atualização representa o processamento de uma nova seção</li>
-        <li>Os candidatos em liderança recebem destaque visual</li>
-        <li>O sistema simula pesos diferentes para cada região da cidade</li>
-      </ul>
-      
-      <h4>Controles:</h4>
-      <ul>
-        <li><strong>Pausar/Continuar</strong>: Interrompe ou retoma a apuração</li>
-        <li><strong>Informações</strong>: Exibe esta janela com detalhes do sistema</li>
-      </ul>
-      
-      <p>Os dados apresentados são fictícios e servem apenas para fins de demonstração do sistema de apuração.</p>
+      <div class="lista-candidatos" id="cardsVer">
+        </div>
     </div>
   </div>
 </div>
 
+<footer>
+  <p><i class="fas fa-shield-alt"></i> Sistema de Simulação Eleitoral Segura • Atualizado em <span id="lastUpdate">--:--:--</span></p>
+  <p style="opacity: 0.6; font-size: 0.8rem; margin-top: 5px;">Dados fictícios para fins de demonstração.</p>
+</footer>
+
+<div class="modal" id="infoModal">
+  <div class="modal-content">
+    <button class="close-modal">&times;</button>
+    <h2 style="color: var(--azul); margin-bottom: 15px;">Sobre a Apuração</h2>
+    <p style="line-height: 1.6; color: var(--texto-secundario);">
+      Este sistema simula uma apuração em tempo real com 50 seções eleitorais. 
+      O sistema inclui "Reviravoltas" (Twists) que alteram a dinâmica dos votos baseada em regiões geográficas e eventos aleatórios.
+    </p>
+    <hr style="margin: 20px 0; border: none; border-top: 1px solid #eee;">
+    <p><strong>Cargos:</strong> Prefeito (Majoritário) e Vereadores (Proporcional).</p>
+  </div>
+</div>
+
+<div class="notificacao-reviravolta" id="notificacao">
+  <div class="not-icon"><i class="fas fa-exclamation-triangle"></i></div>
+  <div class="not-content">
+    <h4 id="notTitle">Título</h4>
+    <p id="notMsg">Mensagem</p>
+  </div>
+</div>
+
 <script>
-// Dados iniciais
+/* =========================================
+   DADOS E CONFIGURAÇÕES
+   ========================================= */
 const TOTAL_SESSOES = 50;
-let sessaoAtual = 1;
+let sessaoAtual = 0;
 let countdown = 5;
 let apuracaoAtiva = true;
 let intervalId = null;
-let startTime = new Date();
+
+// Configuração de Reviravoltas
+let reviravoltaAtiva = false;
+let candidatoSurpresa = null;
+const momentosDramaticos = [10, 20, 30, 40, 48]; // Sessões gatilho
 
 const prefeitos = [
   {nome: "Rodrigo Manga", numero: 28, votos: 4000},
@@ -758,7 +481,6 @@ const prefeitos = [
   {nome: "Fernando Hauss", numero: 43, votos: 211}
 ];
 
-// Substitua a constante vereadores atual por:
 const vereadores = [
   {nome: "Arthur Albuquerque", numero: 38038, votos: 1924},
   {nome: "Nicollas Camargo", numero: 77400, votos: 1519},
@@ -771,43 +493,63 @@ const vereadores = [
   {nome: "Renato Santos", numero: 17000, votos: 304}
 ];
 
-// Pesos para simulação de diferentes regiões
+// Matriz de pesos (Zona Sul, Norte, Leste, Oeste - simulada)
+// 0: Favorito Inicial, 1: Oposição
 const pesos = Array.from({length: TOTAL_SESSOES}, (_, i) => {
-  if (i < 10) return [0.3, 0.7];   // Zona Sul
-  if (i < 25) return [0.75, 0.25]; // Zona Norte
-  if (i < 40) return [0.2, 0.8];   // Zona Leste
-  return [0.8, 0.2];               // Zona Oeste
+  if (i < 10) return [0.3, 0.7];   // Zona A (ruim para favorito)
+  if (i < 25) return [0.85, 0.15]; // Zona B (ótima para favorito)
+  if (i < 40) return [0.4, 0.6];   // Zona C (disputada)
+  return [0.6, 0.4];               // Zona D
 });
 
-// Inicializar
+/* =========================================
+   LÓGICA PRINCIPAL
+   ========================================= */
 function init() {
-  updateDisplay();
-  startCountdown();
   updateTime();
   setInterval(updateTime, 1000);
+  // Primeira renderização zerada
+  updateDisplay(); 
+  startCountdown();
+  
+  // Event Listeners
+  document.getElementById('btnPause').addEventListener('click', togglePause);
+  document.getElementById('btnInfo').addEventListener('click', () => toggleModal(true));
+  document.querySelector('.close-modal').addEventListener('click', () => toggleModal(false));
+  document.getElementById('btnReviravolta').addEventListener('click', forcarReviravolta);
 }
 
-// Atualizar o relógio
 function updateTime() {
   const now = new Date();
-  const hora = now.getHours().toString().padStart(2, '0');
-  const minuto = now.getMinutes().toString().padStart(2, '0');
-  const segundo = now.getSeconds().toString().padStart(2, '0');
-  
-  document.getElementById('horaAtual').textContent = `${hora}:${minuto}`;
-  document.getElementById('lastUpdate').textContent = `${hora}:${minuto}:${segundo}`;
+  const timeString = now.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+  const fullTime = now.toLocaleTimeString('pt-BR');
+  document.getElementById('horaAtual').textContent = timeString;
+  document.getElementById('lastUpdate').textContent = fullTime;
 }
 
-// Iniciar contagem regressiva
 function startCountdown() {
   clearInterval(intervalId);
-  
   intervalId = setInterval(() => {
     if (!apuracaoAtiva) return;
-    
+
     countdown--;
-    document.getElementById('countdown').textContent = countdown;
+    const countEl = document.getElementById('countdown');
+    const countBox = document.getElementById('countdownBox');
     
+    countEl.textContent = countdown;
+
+    // Verificar drama nos últimos segundos
+    if (countdown <= 3) {
+      countBox.classList.add('tenso');
+      countEl.style.color = 'var(--vermelho)';
+    } else {
+      countBox.classList.remove('tenso');
+      countEl.style.color = 'var(--azul)';
+    }
+
+    // Checar reviravolta antes da atualização
+    verificarReviravolta();
+
     if (countdown === 0) {
       if (sessaoAtual < TOTAL_SESSOES) {
         sessaoAtual++;
@@ -820,177 +562,264 @@ function startCountdown() {
   }, 1000);
 }
 
-// Atualizar toda a exibição
-// Substitua a função updateDisplay atual por:
 function updateDisplay() {
-  atualizarPainel(prefeitos, "cardsPref", "barPref", "painelPref", "progressPrefText", "prefeito");
-  atualizarPainel(vereadores, "cardsVer", "barVer", "painelVer", "progressVerText", "vereador");
+  const pctTotal = (sessaoAtual / TOTAL_SESSOES);
   
-  // Atualizar informações gerais
-  document.getElementById('sessao').textContent = `Sessão ${sessaoAtual} de ${TOTAL_SESSOES}`;
-  document.getElementById('totalUrnas').textContent = `${Math.round((sessaoAtual / TOTAL_SESSOES) * 100)}%`;
+  // Atualiza infos do header
+  document.getElementById('sessaoInfo').textContent = `Sessão ${sessaoAtual} de ${TOTAL_SESSOES} apurada`;
+  document.getElementById('totalUrnas').textContent = `${Math.round(pctTotal * 100)}%`;
   
-  // Calcular total de votos
-  const totalVotosPref = calcularTotalVotos(prefeitos, sessaoAtual);
-  const totalVotosVer = calcularTotalVotos(vereadores, sessaoAtual);
-  const totalVotos = totalVotosPref + totalVotosVer;
+  // Atualiza Paineis
+  atualizarPainel(prefeitos, "cardsPref", "barPref", "painelPref", "progressoPrefTxt", "prefeito");
+  atualizarPainel(vereadores, "cardsVer", "barVer", "painelVer", "progressoVerTxt", "vereador");
+
+  // Total Geral de Votos (Soma simples simulada)
+  const totalVotos = Math.floor(6802 * pctTotal * (1 + Math.random() * 0.1)); 
   document.getElementById('totalVotos').textContent = totalVotos.toLocaleString();
+
+  if(sessaoAtual === TOTAL_SESSOES) finalizarApuracao();
+}
+
+function calcularVotosSimulados(candidato, index) {
+  if (sessaoAtual === 0) return 0;
   
-  // Alterar status se for a última sessão
-  if (sessaoAtual === TOTAL_SESSOES) {
-    document.getElementById('status').textContent = "Última sessão sendo apurada";
+  // Lógica baseada nos pesos das sessões que já passaram
+  let pesoAcumulado = 0;
+  for(let i=0; i<sessaoAtual; i++) {
+    // Se for um dos 2 primeiros, usa peso específico, senão usa um genérico random
+    let p = (index < 2) ? pesos[i][index] : (Math.random() * 0.5); 
+    
+    // Fator Candidato Surpresa
+    if (candidatoSurpresa && candidato.nome === candidatoSurpresa.nome) {
+      p *= 3.5; // Boost gigante
+    }
+    
+    pesoAcumulado += p;
   }
+  
+  // Voto base * (progresso + variancia regional)
+  let baseCalculo = (candidato.votos / TOTAL_SESSOES) * sessaoAtual;
+  // Aplica o peso regional simulado
+  let variacaoRegional = 1 + ((pesoAcumulado / sessaoAtual) - 0.5); 
+  
+  return Math.floor(baseCalculo * variacaoRegional);
 }
 
-// Calcular total de votos para um cargo
-function calcularTotalVotos(candidatos, sessao) {
-  return candidatos.reduce((total, candidato, index) => {
-    const peso = pesos[sessao - 1][index < 2 ? 0 : 1];
-    const votosParciais = Math.min(candidato.votos, Math.round(candidato.votos * (sessao / TOTAL_SESSOES) * peso * 2));
-    return total + votosParciais;
-  }, 0);
-}
+function atualizarPainel(lista, idCards, idBar, idPainel, idTxt, cargo) {
+  // 1. Calcular Votos Atuais
+  const candidatosAtualizados = lista.map((c, i) => {
+    return { ...c, votosAtuais: calcularVotosSimulados(c, i) };
+  });
 
-// Atualizar um painel específico
-// Substitua a função atualizarPainel atual por:
-function atualizarPainel(listaCandidatos, idCards, idBarra, idPainel, idProgressText, cargo) {
-  const totalSessao = calcularTotalVotos(listaCandidatos, sessaoAtual);
-  const percentualProgresso = (sessaoAtual / TOTAL_SESSOES) * 100;
+  // 2. Ordenar
+  candidatosAtualizados.sort((a, b) => b.votosAtuais - a.votosAtuais);
+
+  const totalVotosPainel = candidatosAtualizados.reduce((acc, c) => acc + c.votosAtuais, 0);
+  const progressoPct = (sessaoAtual/TOTAL_SESSOES)*100;
+
+  // 3. Renderizar Barra Topo
+  document.getElementById(idBar).style.width = `${progressoPct}%`;
+  document.getElementById(idTxt).textContent = `${progressoPct.toFixed(0)}%`;
+
+  // 4. Flash Effect no Painel
+  const painel = document.getElementById(idPainel);
+  painel.classList.remove('flash');
+  void painel.offsetWidth; // trigger reflow
+  painel.classList.add('flash');
+
+  // 5. Renderizar Cards
+  const container = document.getElementById(idCards);
+  let html = '';
   
-  // Ordenar candidatos por votos
-  const candidatosOrdenados = listaCandidatos.map((candidato, index) => {
-    const peso = pesos[sessaoAtual - 1][index < 2 ? 0 : 1];
-    const votosParciais = Math.min(candidato.votos, Math.round(candidato.votos * (sessaoAtual / TOTAL_SESSOES) * peso * 2));
-    const percentual = totalSessao > 0 ? (votosParciais / totalSessao) * 100 : 0;
+  const numEleitos = (cargo === 'vereador') ? 5 : 1;
+  const maiorVoto = candidatosAtualizados[0].votosAtuais;
+
+  candidatosAtualizados.forEach((c, i) => {
+    const pct = totalVotosPainel > 0 ? (c.votosAtuais / totalVotosPainel * 100) : 0;
+    const isLider = (c.votosAtuais === maiorVoto && c.votosAtuais > 0);
+    const isEleito = (sessaoAtual === TOTAL_SESSOES && i < numEleitos);
     
-    return {
-      ...candidato,
-      votosParciais,
-      percentual
-    };
-  }).sort((a, b) => b.votosParciais - a.votosParciais);
-  
-  // Determinar líder
-  const maiorVotos = Math.max(...candidatosOrdenados.map(c => c.votosParciais));
-  
-  // Para vereadores, destacar os 5 primeiros como eleitos
-  const eleitos = cargo === 'vereador' ? 5 : 1;
-  
-  // Atualizar HTML dos cards
-  const cardsHTML = candidatosOrdenados.map((candidato, index) => {
-    const isLider = candidato.votosParciais === maiorVotos && maiorVotos > 0;
-    const isEleito = index < eleitos && cargo === 'vereador';
-    
-    let classeCard = 'card';
-    if (isLider) classeCard += ' lider';
-    if (isEleito) classeCard += ' eleito';
-    
-    // Adicionar badge para os 5 primeiros (eleitos)
-    const eleitoBadge = isEleito ? '<div class="eleito-badge"><i class="fas fa-check-circle"></i> ELEITO</div>' : '';
-    
-    return `
-      <div class="${classeCard}">
-        <div class="card-header">
-          <div class="nome">${candidato.nome} ${eleitoBadge}</div>
-          <div class="numero">${candidato.numero}</div>
+    let classes = 'card';
+    if(isLider) classes += ' lider';
+    if(isEleito) classes += ' eleito';
+
+    // Se for o candidato surpresa, destaque extra
+    if(candidatoSurpresa && c.nome === candidatoSurpresa.nome) {
+      classes += ' flash'; // Reusa animação flash
+    }
+
+    html += `
+      <div class="${classes}">
+        <div class="card-top">
+          <span class="nome-cand">${c.nome}</span>
+          <span class="num-cand">${c.numero}</span>
         </div>
-        <div class="barra-pct">
-          <span style="width: ${candidato.percentual}%"></span>
+        <div class="pct-bar-bg">
+          <div class="pct-bar-fill" style="width: ${pct}%"></div>
         </div>
-        <div class="card-info">
-          <span class="votos"><i class="fas fa-vote-yea"></i> ${candidato.votosParciais.toLocaleString()} votos</span>
-          <span class="percentual">${candidato.percentual.toFixed(2)}%</span>
+        <div class="card-stats">
+          <span class="votos-num"><i class="fas fa-check"></i> ${c.votosAtuais.toLocaleString()}</span>
+          <span class="pct-num">${pct.toFixed(2)}%</span>
         </div>
       </div>
     `;
-  }).join('');
+  });
   
-  document.getElementById(idCards).innerHTML = cardsHTML;
-  document.getElementById(idBarra).style.width = `${percentualProgresso}%`;
-  document.getElementById(idProgressText).textContent = `${percentualProgresso.toFixed(0)}%`;
-  
-  // Efeito de flash
-  const painelElement = document.getElementById(idPainel);
-  painelElement.classList.add('flash');
-  setTimeout(() => painelElement.classList.remove('flash'), 800);
+  container.innerHTML = html;
 }
 
-// Finalizar a apuração
-function finaliz// Adicione esta função separada e chame-a quando a apuração estiver completa:
-function marcarEleitos() {
-  if (sessaoAtual === TOTAL_SESSOES) {
-    const cardsVereadores = document.querySelectorAll('#cardsVer .card');
-    cardsVereadores.forEach((card, index) => {
-      if (index < 5) {
-        card.classList.add('eleito');
-        setTimeout(() => {
-          card.style.transform = 'scale(1.03)';
-          setTimeout(() => {
-            card.style.transform = 'scale(1)';
-          }, 300);
-        }, index * 200);
-      }
-    });
-  }
-}
-
-// Chame esta função no final da função finalizarApuracao:
 function finalizarApuracao() {
   apuracaoAtiva = false;
-  document.getElementById('status').textContent = "APURAÇÃO ENCERRADA - RESULTADO OFICIAL";
-  document.getElementById('status').style.color = "#dc2626";
-  document.querySelector('.status-indicator').style.backgroundColor = "#dc2626";
-  document.querySelector('.status-indicator').style.animation = "none";
+  clearInterval(intervalId);
+  document.getElementById('statusText').textContent = "APURAÇÃO ENCERRADA";
+  document.querySelector('.dot').style.background = "var(--vermelho)";
+  document.querySelector('.dot').style.animation = "none";
+  document.getElementById('countdownBox').style.display = 'none';
   
-  // Atualizar com resultados finais
-  sessaoAtual = TOTAL_SESSOES;
-  updateDisplay();
-  
-  // Marcar os vereadores eleitos com animação
-  setTimeout(marcarEleitos, 500);
-  
-  // Mostrar mensagem final
-  setTimeout(() => {
-    alert("Apuração concluída! Todos os votos foram contabilizados e o resultado final está disponível.");
-  }, 1500);
+  mostrarNotificacao("FIM DA APURAÇÃO", "Os resultados apresentados são oficiais.");
 }
 
+/* =========================================
+   SISTEMA DE REVIRAVOLTAS (TWISTS)
+   ========================================= */
+function verificarReviravolta() {
+  if (!apuracaoAtiva) return;
+  
+  if (momentosDramaticos.includes(sessaoAtual) && !reviravoltaAtiva) {
+    executarReviravoltaAleatoria();
+  }
+}
 
-// ControlesmentById('btnPause').addEventListener('click', function() {
+function forcarReviravolta() {
+  if(sessaoAtual >= TOTAL_SESSOES) return alert("Apuração já encerrada!");
+  executarReviravoltaAleatoria();
+}
+
+function executarReviravoltaAleatoria() {
+  reviravoltaAtiva = true;
+  const tipos = ['inversao', 'surpresa', 'urna', 'rejeicao'];
+  const tipo = tipos[Math.floor(Math.random() * tipos.length)];
+  
+  switch(tipo) {
+    case 'inversao': inversaoLideranca(); break;
+    case 'surpresa': candidatoSurpresaEmergente(); break;
+    case 'urna': problemaUrna(); break;
+    case 'rejeicao': votosInvalidos(); break;
+  }
+
+  // Reset flag após um tempo
+  setTimeout(() => { reviravoltaAtiva = false; candidatoSurpresa = null; }, 15000);
+}
+
+function inversaoLideranca() {
+  mostrarNotificacao("⚠️ MUDANÇA DE CENÁRIO", "Urnas da Zona Rural chegaram! Tendência de votos invertida drasticamente.");
+  piscarTela('#fbbf24', 3);
+  
+  // Inverte os pesos das próximas 5 sessões
+  for(let i=0; i<5; i++) {
+    if(sessaoAtual + i < TOTAL_SESSOES) {
+      pesos[sessaoAtual+i] = [0.1, 0.9]; // Favorece brutalmente o segundo colocado
+    }
+  }
+}
+
+function candidatoSurpresaEmergente() {
+  // Pega alguém do meio da tabela de prefeitos
+  candidatoSurpresa = prefeitos[Math.floor(Math.random() * (prefeitos.length - 2)) + 2];
+  
+  mostrarNotificacao("🚨 FENÔMENO NAS URNAS", `${candidatoSurpresa.nome} está surpreendendo com votação massiva nesta região!`);
+  piscarTela('#ef4444', 4);
+}
+
+function problemaUrna() {
+  mostrarNotificacao("⏳ PROBLEMA TÉCNICO", "Urna com defeito na Seção 104. A contagem está temporariamente lenta.");
+  piscarTela('#3b82f6', 2);
+  
+  // Atrasa o contador visualmente
+  const el = document.getElementById('countdown');
+  el.textContent = "--";
+  apuracaoAtiva = false;
+  
+  setTimeout(() => {
+    apuracaoAtiva = true;
+    startCountdown(); // Retoma
+  }, 4000);
+}
+
+function votosInvalidos() {
+  mostrarNotificacao("❌ ALTA REJEIÇÃO", "Esta zona eleitoral apresenta índice recorde de votos Nulos/Brancos!");
+  piscarTela('#9ca3af', 2);
+  
+  // Efeito visual: barras ficam cinzas por um momento
+  document.querySelectorAll('.pct-bar-fill').forEach(bar => {
+    bar.style.backgroundColor = '#9ca3af';
+  });
+  
+  setTimeout(() => {
+    document.querySelectorAll('.pct-bar-fill').forEach(bar => {
+      bar.style.backgroundColor = ''; // Volta ao CSS original
+    });
+  }, 3000);
+}
+
+/* =========================================
+   UI HELPERS
+   ========================================= */
+function mostrarNotificacao(titulo, msg) {
+  const notif = document.getElementById('notificacao');
+  document.getElementById('notTitle').textContent = titulo;
+  document.getElementById('notMsg').textContent = msg;
+  
+  notif.classList.add('show');
+  
+  // Som de notificação (simulado visualmente com vibração)
+  if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
+
+  setTimeout(() => {
+    notif.classList.remove('show');
+  }, 6000);
+}
+
+function piscarTela(cor, vezes) {
+  const overlay = document.getElementById('flashOverlay');
+  overlay.style.backgroundColor = cor;
+  overlay.style.animation = `piscarTela 0.3s ease-in-out ${vezes}`;
+  
+  setTimeout(() => {
+    overlay.style.animation = 'none';
+  }, vezes * 300 + 100);
+}
+
+function togglePause() {
   apuracaoAtiva = !apuracaoAtiva;
+  const btn = document.getElementById('btnPause');
+  const status = document.getElementById('statusText');
   
   if (apuracaoAtiva) {
-    this.innerHTML = '<i class="fas fa-pause"></i> Pausar';
-    document.getElementById('status').textContent = "Apuração em andamento";
+    btn.innerHTML = '<i class="fas fa-pause"></i> <span>Pausar</span>';
+    status.textContent = "EM ANDAMENTO";
+    document.querySelector('.dot').style.animation = "pulseDot 1.5s infinite";
+    document.querySelector('.dot').style.background = "var(--verde)";
     startCountdown();
   } else {
-    this.innerHTML = '<i class="fas fa-play"></i> Continuar';
-    document.getElementById('status').textContent = "Apuração pausada";
+    btn.innerHTML = '<i class="fas fa-play"></i> <span>Continuar</span>';
+    status.textContent = "PAUSADO";
+    document.querySelector('.dot').style.animation = "none";
+    document.querySelector('.dot').style.background = "var(--ouro)";
     clearInterval(intervalId);
   }
-});
+}
 
-// Modal de informações
-const infoModal = document.getElementById('infoModal');
-const btnInfo = document.getElementById('btnInfo');
-const closeModal = document.getElementById('closeModal');
-
-btnInfo.addEventListener('click', () => {
-  infoModal.style.display = 'flex';
-});
-
-closeModal.addEventListener('click', () => {
-  infoModal.style.display = 'none';
-});
-
-// Fechar modal clicando fora
-window.addEventListener('click', (event) => {
-  if (event.target === infoModal) {
-    infoModal.style.display = 'none';
+function toggleModal(show) {
+  const modal = document.getElementById('infoModal');
+  if(show) {
+    modal.classList.add('active');
+  } else {
+    modal.classList.remove('active');
   }
-});
+}
 
-// Inicializar a aplicação
+// Iniciar
 window.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
