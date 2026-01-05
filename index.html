@@ -2,660 +2,549 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Eleições 2026 • Central Oficial de Apuração</title>
+<title>Eleições 2026 • Apuração de Alta Tensão</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --bg-dark: #020617;
-  --bg-gradient: radial-gradient(circle at 50% 0%, #1e3a8a 0%, #020617 60%);
-  --card-bg: rgba(30, 41, 59, 0.4);
-  --card-border: rgba(255, 255, 255, 0.1);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
+  --bg-dark: #050505;
+  --bg-gradient: radial-gradient(circle at 50% -20%, #172554 0%, #020617 60%, #000000 100%);
+  --card-glass: rgba(20, 30, 45, 0.6);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text-main: #e2e8f0;
+  --text-muted: #64748b;
   --accent: #3b82f6;
-  --winner: #10b981;
-  --danger: #ef4444;
-  --gold: #fbbf24;
-  --card-height: 85px;
-  --gap: 14px;
+  --winner: #00d26a; /* Verde Neon */
+  --danger: #ef4444; /* Vermelho Alerta */
+  --gold: #f59e0b;
+  --card-h: 75px;
+  --gap: 12px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
 
 body {
-  background: var(--bg-dark);
+  background-color: var(--bg-dark);
   background-image: var(--bg-gradient);
+  background-attachment: fixed;
   color: var(--text-main);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
-  padding-bottom: 80px;
-  padding-top: 50px; /* Espaço para o banner de aviso */
+  padding-top: 60px; /* Espaço para o banner */
+  padding-bottom: 60px;
 }
 
-/* --- AVISO LEGAL (Topo) --- */
-.legal-banner {
+/* --- ALERTA DE INEGIBILIDADE (FIXO E PISCANTE) --- */
+.legal-strip {
   position: fixed;
   top: 0; left: 0; width: 100%;
-  background: linear-gradient(90deg, #7f1d1d, #b91c1c);
+  background: repeating-linear-gradient(
+    45deg,
+    #7f1d1d,
+    #7f1d1d 10px,
+    #991b1b 10px,
+    #991b1b 20px
+  );
   color: #fff;
-  z-index: 1000;
-  padding: 12px;
+  z-index: 9999;
   text-align: center;
+  padding: 10px;
   font-family: 'Oswald', sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   letter-spacing: 1px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 5px 30px rgba(0,0,0,0.8);
+  border-bottom: 3px solid var(--gold);
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  border-bottom: 2px solid var(--gold);
+  gap: 15px;
 }
+.legal-strip i { color: var(--gold); animation: blink 0.5s infinite; }
+.punishment { background: #000; padding: 2px 8px; border-radius: 4px; color: var(--gold); font-weight: bold; }
 
-.legal-banner i { color: var(--gold); animation: blink 1s infinite; }
-.legal-highlight { color: var(--gold); font-weight: 700; text-decoration: underline; }
-
-/* --- HEADER TV STYLE --- */
+/* --- HEADER --- */
 header {
-  padding: 30px 0 20px 0;
+  padding: 20px 0;
+  text-align: center;
   position: relative;
-  z-index: 20;
 }
-
-.header-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 20px;
-  display: flex;
-  justify-content: space-between;
+.logo-area {
+  display: inline-flex;
+  flex-direction: column;
   align-items: center;
 }
-
-.brand { display: flex; align-items: center; gap: 20px; }
-.brand-icon { 
-  font-size: 3rem; 
-  color: transparent; 
-  background: linear-gradient(180deg, var(--gold), #d97706);
-  -webkit-background-clip: text;
-  background-clip: text;
-  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.4));
-}
-.brand-text h1 { 
-  font-family: 'Oswald', sans-serif; 
-  font-size: 2.5rem; 
-  text-transform: uppercase; 
-  letter-spacing: -1px; 
-  line-height: 0.9; 
-  background: linear-gradient(90deg, #fff, #cbd5e1);
+.logo-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  line-height: 1;
+  letter-spacing: -2px;
 }
-.brand-text span { 
-  font-size: 0.9rem; 
-  color: var(--accent); 
-  letter-spacing: 4px; 
-  text-transform: uppercase; 
-  font-weight: 800; 
-  display: block; 
+.logo-sub {
+  color: var(--accent);
+  font-size: 0.8rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
   margin-top: 5px;
+  font-weight: 800;
 }
 
-.live-badge {
-  background: rgba(220, 38, 38, 0.15);
-  border: 1px solid var(--danger);
-  color: var(--danger);
-  padding: 8px 20px;
-  border-radius: 4px;
-  font-family: 'Oswald', sans-serif;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
-}
-.live-dot { 
-  width: 10px; height: 10px; 
-  background: var(--danger); 
-  border-radius: 50%; 
-  box-shadow: 0 0 10px var(--danger);
-  animation: pulseRed 1.5s infinite; 
-}
-
-/* --- DASHBOARD --- */
-.dashboard {
+/* --- LAYOUT GRID --- */
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
   max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
 }
 
+/* --- PAINÉIS (VIDRO) --- */
 .panel {
-  background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 16px;
-  padding: 25px;
+  background: var(--card-glass);
+  backdrop-filter: blur(15px);
   border: 1px solid var(--card-border);
-  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4);
-  display: flex; flex-direction: column;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
 }
 
-.panel-header {
+/* Header do Painel */
+.p-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  align-items: flex-end;
+  border-bottom: 2px solid rgba(255,255,255,0.05);
   padding-bottom: 15px;
+  margin-bottom: 20px;
 }
-
-.panel-title { 
-  font-family: 'Oswald', sans-serif; 
-  font-size: 1.8rem; 
+.p-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.8rem;
   color: #fff;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-}
-.panel-stats { 
-  font-family: 'Inter', sans-serif;
-  background: rgba(0,0,0,0.3);
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-size: 0.85rem;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-.panel-stats span { color: var(--gold); font-weight: 700; margin-left: 5px; }
-
-/* --- LISTA DE CANDIDATOS --- */
-.candidates-wrapper {
-  position: relative;
-  /* Altura = 8 cards * (85px altura + 14px gap) */
-  height: 800px; 
-}
-
-.candidate-card {
-  position: absolute;
-  left: 0; right: 0;
-  height: var(--card-height);
-  background: linear-gradient(90deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  transition: top 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.3s, background 0.3s, border-color 0.3s;
-  overflow: hidden;
-}
-
-/* Efeito Hover leve */
-.candidate-card:hover { border-color: rgba(255,255,255,0.2); }
-
-/* ESTILO DO 1º LUGAR */
-.candidate-card.rank-1 {
-  background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), rgba(6, 78, 59, 0.4));
-  border: 1px solid var(--winner);
-  box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
-  z-index: 10;
-}
-.candidate-card.rank-1 .c-pos { background: var(--winner); color: #064e3b; box-shadow: 0 0 10px var(--winner); }
-.candidate-card.rank-1 .c-pct { color: var(--winner); text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
-
-.c-pos {
-  width: 36px; height: 36px;
-  background: #334155;
-  color: #94a3b8;
-  border-radius: 50%;
-  display: flex; justify-content: center; align-items: center;
-  font-family: 'Oswald', sans-serif;
-  font-weight: 700; font-size: 1.1rem;
-  margin-right: 20px;
-  flex-shrink: 0;
-  transition: all 0.5s;
-}
-
-.c-img {
-  width: 50px; height: 50px;
-  background: linear-gradient(135deg, #475569, #1e293b);
-  border-radius: 50%;
-  margin-right: 20px;
-  display: flex; justify-content: center; align-items: center;
-  font-size: 1.4rem; color: #cbd5e1;
-  border: 2px solid rgba(255,255,255,0.05);
-  flex-shrink: 0;
-}
-
-.c-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-.c-name { 
-  font-weight: 700; font-size: 1.15rem; color: #fff; letter-spacing: 0.5px;
-  margin-bottom: 4px;
-}
-.c-party { 
-  font-size: 0.75rem; 
-  color: var(--text-muted); 
-  text-transform: uppercase; 
-  letter-spacing: 1px;
-  display: flex; align-items: center; gap: 6px;
-}
-.party-badge {
-  background: rgba(255,255,255,0.1); 
-  padding: 2px 6px; 
-  border-radius: 3px; 
-  font-weight: 600;
-  font-size: 0.7rem;
-}
-
-.c-votes { text-align: right; z-index: 2; }
-.c-pct { 
-  font-family: 'Oswald', sans-serif;
-  font-size: 1.8rem; 
-  font-weight: 700; 
-  color: #fff; 
-  display: block; 
   line-height: 1;
 }
-.c-abs { 
-  font-size: 0.8rem; 
-  color: var(--text-muted); 
-  font-variant-numeric: tabular-nums;
-  opacity: 0.8;
+.p-meta {
+  text-align: right;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.p-urna {
+  color: var(--winner);
+  font-weight: 700;
+  font-size: 1.1rem;
 }
 
-.bar-container {
+/* --- LISTA DE CANDIDATOS --- */
+.list-wrapper {
+  position: relative;
+  height: 700px; /* Altura fixa para permitir animação absoluta */
+}
+
+.c-card {
   position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 4px;
-  background: rgba(0,0,0,0.3);
+  left: 0; right: 0;
+  height: var(--card-h);
+  background: linear-gradient(90deg, rgba(30,41,59,0.5), rgba(15,23,42,0.8));
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  transition: top 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.2s, background 0.3s;
+}
+
+/* Efeito Liderança */
+.c-card.rank-1 {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(6, 78, 59, 0.2));
+  border: 1px solid var(--winner);
+  z-index: 10;
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
+}
+.c-card.rank-1 .pos-badge { background: var(--winner); color: #000; box-shadow: 0 0 10px var(--winner); }
+.c-card.rank-1 .pct-num { color: var(--winner); text-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+
+/* Badge de Posição */
+.pos-badge {
+  width: 30px; height: 30px;
+  background: #334155;
+  border-radius: 4px;
+  display: flex; justify-content: center; align-items: center;
+  font-weight: 800; font-size: 1rem;
+  margin-right: 15px;
+  font-family: 'Oswald', sans-serif;
+  color: #94a3b8;
+  transition: all 0.3s;
+}
+
+/* Info Candidato */
+.c-info { flex: 1; }
+.c-name { display: block; font-weight: 700; font-size: 1.1rem; color: #f1f5f9; letter-spacing: 0.5px; }
+.c-party { 
+  font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; 
+  display: inline-block; background: rgba(255,255,255,0.05); padding: 2px 5px; border-radius: 3px; margin-top: 4px;
+}
+
+/* Votos */
+.c-stats { text-align: right; min-width: 100px; }
+.pct-num { font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; display: block; line-height: 1; }
+.abs-num { font-size: 0.8rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+
+/* Barra Progresso */
+.bar-track {
+  position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: rgba(0,0,0,0.3);
 }
 .bar-fill {
-  height: 100%;
-  background: var(--accent);
-  transition: width 0.8s ease-out;
-  width: 0%;
-  box-shadow: 0 0 15px var(--accent);
+  height: 100%; width: 0%; background: var(--accent);
+  transition: width 0.3s ease-out;
   position: relative;
+  box-shadow: 0 0 10px var(--accent);
 }
-.bar-fill::after {
-  content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 4px; background: #fff;
-  opacity: 0.7; box-shadow: 0 0 5px #fff;
-}
-.rank-1 .bar-fill { background: var(--winner); box-shadow: 0 0 15px var(--winner); }
+.rank-1 .bar-fill { background: var(--winner); box-shadow: 0 0 10px var(--winner); }
 
-/* --- NEWS TICKER --- */
-.news-ticker {
-  position: fixed;
-  bottom: 0; left: 0; width: 100%;
-  background: #000;
-  border-top: 3px solid var(--gold);
-  color: white;
-  display: flex;
-  height: 45px;
+/* --- EFEITOS DE TENSÃO 10/10 (Prefeito) --- */
+.turnover-flash {
+  animation: flashScreen 0.2s ease-in-out;
+}
+@keyframes flashScreen { 0% { background-color: rgba(255,255,255,0.1); } 100% { background-color: transparent; } }
+
+/* Indicador "VOTO A VOTO" */
+.neck-neck {
+  position: absolute; top: 10px; right: 10px;
+  background: var(--danger); color: white;
+  padding: 4px 10px; font-weight: 800; font-size: 0.7rem;
+  border-radius: 4px; text-transform: uppercase;
+  animation: pulsePanic 0.8s infinite;
+  display: none;
+  z-index: 50;
+}
+.panel.panic-mode .neck-neck { display: block; }
+.panel.panic-mode { border: 1px solid var(--danger); box-shadow: 0 0 30px rgba(239, 68, 68, 0.15); }
+
+/* Diferença de Votos (Badge) */
+.diff-tag {
+  font-size: 0.7rem; font-weight: bold; padding: 2px 6px; border-radius: 3px;
+  margin-top: 2px; display: inline-block;
+}
+.diff-close { color: var(--gold); background: rgba(245, 158, 11, 0.1); border: 1px solid var(--gold); }
+.diff-safe { color: var(--text-muted); opacity: 0.5; }
+
+/* --- FOOTER NEWS --- */
+.ticker-wrap {
+  position: fixed; bottom: 0; left: 0; width: 100%;
+  background: #000; border-top: 2px solid var(--accent);
+  height: 40px; display: flex; align-items: center;
   z-index: 100;
-  box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
 }
-.ticker-label {
-  background: var(--gold);
-  color: #000;
-  padding: 0 30px;
-  display: flex; align-items: center;
-  font-weight: 800;
-  font-family: 'Oswald', sans-serif;
-  text-transform: uppercase;
-  font-size: 1rem;
-  letter-spacing: 1px;
+.ticker-head {
+  background: var(--accent); color: #000; padding: 0 20px;
+  height: 100%; display: flex; align-items: center;
+  font-weight: 800; font-family: 'Oswald';
 }
-.ticker-content {
-  flex: 1;
-  display: flex; align-items: center;
-  overflow: hidden;
-  white-space: nowrap;
-  background: #0f172a;
+.ticker-move {
+  white-space: nowrap; animation: ticker 30s linear infinite;
+  color: #fff; padding-left: 20px; font-size: 0.9rem;
 }
-.ticker-item {
-  animation: slideLeft 25s linear infinite;
-  display: inline-block;
-  padding-left: 100%;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #e2e8f0;
-}
+@keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes pulsePanic { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
 
-/* --- ANIMATIONS --- */
-@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-@keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
-@keyframes slideLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
-/* --- EFEITOS DE DRAMA/TENSÃO --- */
-
-/* Quando a diferença é pequena, a barra do 2º lugar pulsa */
-@keyframes heartbeat {
-  0% { box-shadow: 0 0 5px var(--accent); }
-  50% { box-shadow: 0 0 20px var(--accent), 0 0 10px #fff; }
-  100% { box-shadow: 0 0 5px var(--accent); }
-}
-
-.close-call .bar-fill {
-  animation: heartbeat 0.8s infinite;
-  background: var(--gold) !important; /* Muda para amarelo alerta */
-}
-
-/* Indicador de diferença de votos */
-.diff-badge {
-  font-size: 0.7rem;
-  background: rgba(0,0,0,0.5);
-  padding: 2px 6px;
-  border-radius: 4px;
-  margin-top: 4px;
-  display: inline-block;
-  font-family: 'Inter', sans-serif;
-}
-.rank-1 .diff-badge { display: none; } /* Líder não mostra diferença pra ele mesmo */
-.close-call .diff-badge { color: var(--danger); font-weight: bold; animation: blink 1s infinite; }
-
-/* Ticker em modo pânico */
-.ticker-panic {
-  background: var(--danger) !important; 
-  color: #fff !important;
-}
-
-
+/* Responsividade */
 @media (max-width: 900px) {
-  .dashboard { grid-template-columns: 1fr; gap: 20px; }
-  .brand-text h1 { font-size: 1.8rem; }
-  .legal-banner { font-size: 0.7rem; flex-direction: column; gap: 2px; }
-  .candidates-wrapper { height: 750px; } /* Ajuste mobile */
+  .main-grid { grid-template-columns: 1fr; }
+  .list-wrapper { height: 750px; }
 }
 </style>
 </head>
 <body>
 
-<div class="legal-banner">
+<div class="legal-strip">
   <i class="fas fa-exclamation-triangle"></i>
-  <span>O resultado só pode ser falado depois das 00h. Se falar, a punição é de <span class="legal-highlight">Inegibilidade por 1 eleição</span>.</span>
+  <span>RESULTADO SOB SIGILO ATÉ 00H. QUEBRA DE SIGILO ACARRETA EM: <span class="punishment">INEGIBILIDADE POR 1 ELEIÇÃO</span></span>
   <i class="fas fa-exclamation-triangle"></i>
 </div>
 
 <header>
-  <div class="header-container">
-    <div class="brand">
-      <i class="fas fa-database brand-icon"></i>
-      <div class="brand-text">
-        <h1>Apuração 2026</h1>
-        <span>Sistema Unificado de Dados</span>
-      </div>
-    </div>
-    <div class="live-badge">
-      <div class="live-dot"></div> TRANSMISSÃO AO VIVO
-    </div>
+  <div class="logo-area">
+    <div class="logo-title">ELEIÇÕES 2026</div>
+    <div class="logo-sub">Central de Totalização • Ao Vivo</div>
   </div>
 </header>
 
-<div class="dashboard">
-  <div class="panel">
-    <div class="panel-header">
-      <div class="panel-title">PREFEITURA</div>
-      <div class="panel-stats">
-        URNAS APURADAS: <span id="urnasPref">0%</span>
+<div class="main-grid">
+  
+  <div class="panel" id="panelPref">
+    <div class="neck-neck">⚠️ DISPUTA VOTO A VOTO</div>
+    <div class="p-header">
+      <div>
+        <div class="p-title">PREFEITO</div>
+        <div class="p-meta">Maioria Simples</div>
+      </div>
+      <div class="p-meta">
+        URNAS: <span class="p-urna" id="urnaPref">0.00%</span>
       </div>
     </div>
-    <div class="candidates-wrapper" id="containerPref"></div>
+    <div class="list-wrapper" id="containerPref">
+      </div>
   </div>
 
   <div class="panel">
-    <div class="panel-header">
-      <div class="panel-title">CÂMARA MUNICIPAL</div>
-      <div class="panel-stats">
-        URNAS APURADAS: <span id="urnasVer">0%</span>
+    <div class="p-header">
+      <div>
+        <div class="p-title">VEREADOR</div>
+        <div class="p-meta">Proporcional • 17 Vagas</div>
+      </div>
+      <div class="p-meta">
+        URNAS: <span class="p-urna" id="urnaVer">0.00%</span>
       </div>
     </div>
-    <div class="candidates-wrapper" id="containerVer"></div>
+    <div class="list-wrapper" id="containerVer">
+      </div>
   </div>
+
 </div>
 
-<div class="news-ticker">
-  <div class="ticker-label">ÚLTIMAS NOTÍCIAS</div>
-  <div class="ticker-content">
-    <div class="ticker-item" id="tickerText">
-      AGUARDANDO LIBERAÇÃO DO TSE • APURAÇÃO SEGUE EM RITMO ACELERADO • RESULTADOS PARCIAIS SUJEITOS A ALTERAÇÃO • MANTENHA O SIGILO ATÉ 00H
-    </div>
+<div class="ticker-wrap">
+  <div class="ticker-head" id="tickerLabel">EM TEMPO REAL</div>
+  <div class="ticker-move" id="tickerText">
+    ACOMPANHE A CHEGADA DOS DADOS • EXPECTATIVA DE RECORDE DE VOTOS • SISTEMA DE APURAÇÃO INICIADO • AGUARDE A TOTALIZAÇÃO
   </div>
 </div>
 
 <script>
-// --- DADOS INICIAIS ---
+// --- DADOS (BASEADOS NA SUA LISTA) ---
+// Nota: Os votos iniciais aqui são apenas para referência de "potencial".
+// O script vai manipular esses números para criar o drama.
+
 const prefeitos = [
-  { id: 'p1', nome: "Rodrigo Manga", numero: 28, partido: "PRTB", votos: 12500, base: 1.0 }, // Base = multiplicador de força
-  { id: 'p2', nome: "Ryan Everton", numero: 22, partido: "PL", votos: 11800, base: 1.1 }, // Ryan tem base maior para virar no final
-  { id: 'p3', nome: "Arthur Silva", numero: 17, partido: "PSL", votos: 5200, base: 0.8 },
-  { id: 'p4', nome: "Gabriel Arraes", numero: 77, partido: "SD", votos: 4800, base: 0.7 },
-  { id: 'p5', nome: "Javier Mendonza", numero: 35, partido: "PMB", votos: 1500, base: 0.5 },
-  { id: 'p6', nome: "Noah D.", numero: 10, partido: "RPL", votos: 1200, base: 0.5 },
-  { id: 'p7', nome: "Henrique Martins", numero: 15, partido: "MDB", votos: 800, base: 0.4 },
-  { id: 'p8', nome: "Fernando Hauss", numero: 43, partido: "PV", votos: 211, base: 0.2 }
+  { id: 'p1', nome: "Rodrigo Manga", numero: 28, partido: "PRTB", votos: 0, cor: "#22c55e" },
+  { id: 'p2', nome: "Ryan Everton", numero: 22, partido: "PL", votos: 0, cor: "#3b82f6" },
+  { id: 'p3', nome: "Arthur Silva", numero: 17, partido: "PSL", votos: 0 },
+  { id: 'p4', nome: "Gabriel Arraes", numero: 77, partido: "SD", votos: 0 },
+  { id: 'p5', nome: "Javier Mendonza", numero: 35, partido: "PMB", votos: 0 },
+  { id: 'p6', nome: "Noah D.", numero: 10, partido: "RPL", votos: 0 },
+  { id: 'p7', nome: "Henrique Martins", numero: 15, partido: "MDB", votos: 0 },
+  { id: 'p8', nome: "Fernando H.", numero: 43, partido: "PV", votos: 0 }
 ];
 
 const vereadores = [
-  { id: 'v1', nome: "Arthur A.", numero: 38000, partido: "UDB", votos: 1500 },
-  { id: 'v2', nome: "Nicollas C.", numero: 77400, partido: "SD", votos: 1450 },
-  { id: 'v3', nome: "Vitor H.", numero: 22222, partido: "PL", votos: 1300 },
-  { id: 'v4', nome: "Marcos F.", numero: 50555, partido: "PSOL", votos: 1250 },
-  { id: 'v5', nome: "Henry F.", numero: 77778, partido: "SD", votos: 1100 },
-  { id: 'v6', nome: "Lucas Jr.", numero: 27000, partido: "DC", votos: 1080 },
-  { id: 'v7', nome: "Michael N.", numero: 45555, partido: "PSDB", votos: 900 },
-  { id: 'v8', nome: "Thaise G.", numero: 11111, partido: "PP", votos: 850 }
+  { id: 'v1', nome: "Arthur Albuquerque", numero: 38038, partido: "UDB", votos: 0 },
+  { id: 'v2', nome: "Nicollas Camargo", numero: 77400, partido: "SD", votos: 0 },
+  { id: 'v3', nome: "Vitor Henrique", numero: 22222, partido: "PL", votos: 0 },
+  { id: 'v4', nome: "Marcos Fernandes", numero: 50555, partido: "PSOL", votos: 0 },
+  { id: 'v5', nome: "Henry Farias", numero: 77778, partido: "SD", votos: 0 },
+  { id: 'v6', nome: "Lucas Junior", numero: 27000, partido: "DC", votos: 0 },
+  { id: 'v7', nome: "Michael Nonato", numero: 45555, partido: "PSDB", votos: 0 },
+  { id: 'v8', nome: "Thaise Gomes", numero: 11111, partido: "PP", votos: 0 },
+  { id: 'v9', nome: "Renato Santos", numero: 17000, partido: "PSL", votos: 0 }
 ];
 
-const TOTAL_URNAS = 1500;
+// Configuração Global
+const TOTAL_URNAS = 2000;
 let urnasApuradas = 0;
-let intervalId = null;
+let isFinished = false;
 
-// --- INICIALIZAÇÃO ---
-function createCards(data, containerId) {
+// --- INICIALIZAÇÃO DE CARDS ---
+function initCards(lista, containerId) {
   const container = document.getElementById(containerId);
   container.innerHTML = '';
-  data.forEach((c, index) => {
+  lista.forEach((c, i) => {
     const card = document.createElement('div');
-    card.className = 'candidate-card';
+    card.className = 'c-card';
     card.id = c.id;
-    card.style.top = `${index * 99}px`;
+    card.style.top = `${i * (75 + 12)}px`; // Altura + Gap
     
     card.innerHTML = `
-      <div class="c-pos">${index + 1}º</div>
-      <div class="c-img"><i class="fas fa-user"></i></div>
+      <div class="pos-badge">${i+1}º</div>
       <div class="c-info">
         <span class="c-name">${c.nome}</span>
-        <div class="c-party"><span class="party-badge">${c.numero}</span> ${c.partido}</div>
+        <span class="c-party">${c.numero} • ${c.partido}</span>
       </div>
-      <div class="c-votes">
-        <span class="c-pct">0.00%</span>
-        <div class="c-abs">${c.votos.toLocaleString()} VOTOS</div>
-        <div class="diff-badge">Dif: -0</div>
+      <div class="c-stats">
+        <span class="pct-num">0.00%</span>
+        <span class="abs-num">0 VOTOS</span>
+        <div class="diff-tag" style="display:none"></div>
       </div>
-      <div class="bar-container">
-        <div class="bar-fill" style="width: 0%"></div>
-      </div>
+      <div class="bar-track"><div class="bar-fill"></div></div>
     `;
     container.appendChild(card);
   });
 }
 
-createCards(prefeitos, 'containerPref');
-createCards(vereadores, 'containerVer');
+initCards(prefeitos, 'containerPref');
+initCards(vereadores, 'containerVer');
 
-// --- MOTOR DE SUSPENSE ---
-function startApuracao() {
-  intervalId = setInterval(() => {
+// --- MOTOR DE DRAMA (CORE) ---
+function startSimulation() {
+  const interval = setInterval(() => {
     if (urnasApuradas >= TOTAL_URNAS) {
-      finalizarApuracao();
+      clearInterval(interval);
+      finishElection();
       return;
     }
-    
-    // Acelera no meio, desacelera no final para suspense
-    let speed = 2;
-    if (urnasApuradas > TOTAL_URNAS * 0.9) speed = 1; // Fica tenso no final (lento)
-    
-    urnasApuradas += Math.floor(Math.random() * 5) + speed;
-    
-    // VEREADORES (Lógica Normal)
-    injetarVotosNormal(vereadores);
-    
-    // PREFEITOS (Lógica de Drama Scriptado)
-    gerenciarDramaPrefeito();
 
-    updateScreen();
-  }, 800); // Atualização rápida
+    // Ritmo variado: acelera no meio, desacelera dramaticamente no final
+    let speed = Math.floor(Math.random() * 8) + 2;
+    if (urnasApuradas > TOTAL_URNAS * 0.95) speed = 1; // Câmera lenta no final
+    
+    urnasApuradas += speed;
+    const pctGlobal = (urnasApuradas / TOTAL_URNAS) * 100;
+
+    // --- LÓGICA VEREADOR (Tensão 6/10) ---
+    // Competitivo, mas com hierarquia clara
+    vereadores.forEach((c, idx) => {
+      // Base: o rank original da lista tem mais chance de ganhar votos
+      let power = (10 - idx) * 2; 
+      // Variação aleatória
+      let randomVote = Math.floor(Math.random() * power) + Math.floor(Math.random() * 5);
+      c.votos += randomVote;
+    });
+
+    // --- LÓGICA PREFEITO (Tensão 10/10) ---
+    // Script de "Cabeça a Cabeça" forçado
+    processDramaPrefeito(pctGlobal);
+
+    updateUI(pctGlobal);
+
+  }, 400); // 400ms por tick
 }
 
-function injetarVotosNormal(lista) {
-  lista.forEach(c => {
-    c.votos += Math.floor(Math.random() * 30);
-  });
-}
-
-function gerenciarDramaPrefeito() {
-  const porcentagem = (urnasApuradas / TOTAL_URNAS) * 100;
+function processDramaPrefeito(pct) {
+  // O objetivo é fazer Manga (p1) e Ryan (p2) ficarem colados até o fim
+  // Os outros recebem sobras
   
-  // Ordena para saber quem é lider e vice
-  let rankingTemp = [...prefeitos].sort((a, b) => b.votos - a.votos);
-  let lider = rankingTemp[0];
-  let vice = rankingTemp[1];
-  let diferenca = lider.votos - vice.votos;
+  const lider = prefeitos.find(p => p.id === 'p1'); // Manga
+  const vice = prefeitos.find(p => p.id === 'p2'); // Ryan
 
+  // Votos base para os menores
   prefeitos.forEach(c => {
-    // Votos base
-    let incremento = Math.floor(Math.random() * 150 * (c.base || 1));
-    
-    // --- FASE 1: CONSOLIDAÇÃO (0-60%) ---
-    // O líder ganha um pouco mais para assustar
-    if (porcentagem < 60 && c === lider) {
-      incremento += 50; 
+    if (c.id !== 'p1' && c.id !== 'p2') {
+      c.votos += Math.floor(Math.random() * 5); 
     }
-
-    // --- FASE 2: A REAÇÃO (60-85%) ---
-    // O vice começa a receber pacotes massivos de votos
-    if (porcentagem >= 60 && porcentagem < 85) {
-      if (c === vice) incremento += Math.floor(Math.random() * 300) + 100; // BOOM!
-    }
-
-    // --- FASE 3: O CLÍMAX (85-98%) ---
-    // "Rubber Band Effect": Se a diferença for grande, ajuda o vice.
-    // Se o vice passou, freia o vice e ajuda o antigo lider.
-    if (porcentagem >= 85) {
-      if (diferenca > 2000 && c === vice) {
-         incremento += 600; // Ajuda agressiva pro vice buscar
-      } else if (diferenca < -500 && c === lider) { 
-         incremento += 600; // Vice passou demais? Ajuda o antigo lider a recuperar
-      } else if (Math.abs(diferenca) < 1000) {
-         // Empate técnico: Votos aleatórios caóticos para troca de posição constante
-         incremento += Math.floor(Math.random() * 400); 
-      }
-    }
-
-    c.votos += incremento;
   });
 
-  // Atualiza Ticker com base na tensão
-  atualizarTicker(diferenca, porcentagem);
-}
+  // DRAMA SCRIPT
+  let boostManga = Math.floor(Math.random() * 50);
+  let boostRyan = Math.floor(Math.random() * 50);
 
-function atualizarTicker(diferenca, pct) {
-  const ticker = document.getElementById('tickerText');
-  const label = document.querySelector('.ticker-label');
-  const container = document.querySelector('.ticker-content');
-  
-  if (pct > 90 && Math.abs(diferenca) < 1500) {
-    // MODO PÂNICO
-    label.classList.add('ticker-panic');
-    label.innerText = "ALERTA MÁXIMO";
-    ticker.innerText = `⚠️ ATENÇÃO: DIFERENÇA DE APENAS ${Math.abs(diferenca).toLocaleString()} VOTOS! • CENÁRIO DE EMPATE TÉCNICO • DISPUTA VOTO A VOTO!`;
-  } else if (pct > 60 && diferenca < 5000) {
-    label.classList.remove('ticker-panic');
-    label.innerText = "REVIRAVOLTA?";
-    ticker.innerText = "URNAS DA PERIFERIA IMPULSIONAM O 2º COLOCADO • DISTÂNCIA DIMINUI RAPIDAMENTE...";
+  // Fase 1: Manga sai na frente (0-30%)
+  if (pct < 30) {
+    boostManga += 20;
+  }
+  // Fase 2: Ryan recupera violentamente (30-60%)
+  else if (pct >= 30 && pct < 60) {
+    boostRyan += 40; // Ryan acelera
+  }
+  // Fase 3: Cabeça a Cabeça (60-95%)
+  else if (pct >= 60 && pct < 95) {
+    // Quem estiver atrás ganha boost para empatar
+    if (lider.votos > vice.votos) boostRyan += 35;
+    else boostManga += 35;
+  }
+  // Fase 4: O Caos Final (95-100%)
+  else {
+    // Diferença mínima aleatória
+    if (Math.random() > 0.5) boostManga += 15;
+    else boostRyan += 15;
+  }
+
+  lider.votos += boostManga;
+  vice.votos += boostRyan;
+
+  // Efeito Visual de Virada
+  const diff = lider.votos - vice.votos;
+  if (Math.abs(diff) < 200 && pct > 50) {
+    document.getElementById('panelPref').classList.add('panic-mode');
+    document.getElementById('tickerLabel').style.background = "var(--danger)";
+    document.getElementById('tickerLabel').innerText = "URGENTE";
+    document.getElementById('tickerText').innerText = `⚠️ ATENÇÃO: DIFERENÇA DE APENAS ${Math.abs(diff)} VOTOS ENTRE ${lider.nome.toUpperCase()} E ${vice.nome.toUpperCase()}! • CENÁRIO INDEFINIDO!`;
   } else {
-    label.classList.remove('ticker-panic');
-    label.innerText = "EM TEMPO REAL";
-    ticker.innerText = "ACOMPANHE A APURAÇÃO OFICIAL • DADOS ATUALIZADOS DIRETAMENTE DO TSE • MANTENHA A CALMA";
+    document.getElementById('panelPref').classList.remove('panic-mode');
+    if(pct < 100) {
+        document.getElementById('tickerLabel').style.background = "var(--accent)";
+        document.getElementById('tickerLabel').innerText = "EM TEMPO REAL";
+    }
   }
 }
 
-// --- VISUALIZAÇÃO ---
-function updateScreen() {
-  const pctUrnas = Math.min((urnasApuradas / TOTAL_URNAS) * 100, 100);
-  document.getElementById('urnasPref').textContent = pctUrnas.toFixed(2) + '%';
-  document.getElementById('urnasVer').textContent = pctUrnas.toFixed(2) + '%';
-  
-  const totalVotosPref = prefeitos.reduce((acc, c) => acc + c.votos, 0);
-  const totalVotosVer = vereadores.reduce((acc, c) => acc + c.votos, 0);
+// --- ATUALIZAÇÃO UI ---
+function updateUI(pctGlobal) {
+  // Atualiza contadores de % de urna
+  document.getElementById('urnaPref').textContent = pctGlobal.toFixed(2) + '%';
+  document.getElementById('urnaVer').textContent = pctGlobal.toFixed(2) + '%';
 
-  updatePanel(prefeitos, totalVotosPref);
-  updatePanel(vereadores, totalVotosVer);
+  updatePanel(prefeitos, 'p1', 'p2');
+  updatePanel(vereadores, 'v1', 'v2');
 }
 
-function updatePanel(lista, totalVotos) {
+function updatePanel(lista, idLiderOriginal, idViceOriginal) {
+  // Ordena
   const ranking = [...lista].sort((a, b) => b.votos - a.votos);
-  const liderVotos = ranking[0].votos;
+  const totalVotos = lista.reduce((sum, c) => sum + c.votos, 0);
+  const votosLider = ranking[0].votos;
 
   ranking.forEach((c, index) => {
     const card = document.getElementById(c.id);
-    card.style.top = `${index * 99}px`;
-    
-    // Atualiza Posição
-    const posEl = card.querySelector('.c-pos');
-    posEl.textContent = `${index + 1}º`;
-    
-    // Estilo Lider
-    if (index === 0) {
-      card.classList.add('rank-1');
-      card.classList.remove('close-call');
-      posEl.style.background = "var(--winner)";
-      posEl.style.color = "#064e3b";
-    } else {
-      card.classList.remove('rank-1');
-      posEl.style.background = "#334155";
-      posEl.style.color = "#94a3b8";
-      
-      // Se for o 2º lugar e estiver perto (menos de 3% de diferença do total ou 2000 votos)
-      if (index === 1 && (liderVotos - c.votos) < 2500) {
-        card.classList.add('close-call');
-      } else {
-        card.classList.remove('close-call');
-      }
-    }
-    
-    // Atualiza Texto
     const pct = totalVotos > 0 ? (c.votos / totalVotos * 100).toFixed(2) : "0.00";
-    card.querySelector('.c-pct').textContent = `${pct}%`;
-    card.querySelector('.c-abs').textContent = `${c.votos.toLocaleString()} VOTOS`;
     
-    // Diferença para o líder
-    const diffEl = card.querySelector('.diff-badge');
-    if (index > 0) {
-      const diff = liderVotos - c.votos;
-      diffEl.textContent = `Dif: -${diff.toLocaleString()}`;
-      diffEl.style.display = 'inline-block';
-    } else {
-      diffEl.style.display = 'none';
-    }
+    // Posição Y (Animação)
+    card.style.top = `${index * (75 + 12)}px`;
+
+    // Dados Texto
+    card.querySelector('.pct-num').textContent = pct + '%';
+    card.querySelector('.abs-num').textContent = c.votos.toLocaleString('pt-BR');
+    card.querySelector('.pos-badge').textContent = (index + 1) + 'º';
 
     // Barra
-    const larguraBarra = liderVotos > 0 ? (c.votos / liderVotos * 100) : 0;
-    card.querySelector('.bar-fill').style.width = `${larguraBarra}%`;
+    const barW = votosLider > 0 ? (c.votos / votosLider * 100) : 0;
+    card.querySelector('.bar-fill').style.width = barW + '%';
+
+    // Badge Diferença (Só mostra para o 2º lugar se tiver perto)
+    const diffTag = card.querySelector('.diff-tag');
+    if (index === 1) {
+      const diff = votosLider - c.votos;
+      diffTag.style.display = 'inline-block';
+      diffTag.textContent = `-${diff.toLocaleString()}`;
+      diffTag.className = diff < 5000 ? 'diff-tag diff-close' : 'diff-tag diff-safe';
+    } else {
+      diffTag.style.display = 'none';
+    }
+
+    // Estilos de Líder
+    if (index === 0) {
+      card.classList.add('rank-1');
+    } else {
+      card.classList.remove('rank-1');
+    }
   });
 }
 
-function finalizarApuracao() {
-  clearInterval(intervalId);
-  document.getElementById('tickerText').textContent = "APURAÇÃO ENCERRADA. RESULTADO CONFIRMADO.";
-  document.querySelector('.ticker-label').classList.remove('ticker-panic');
-  document.querySelector('.ticker-label').style.background = "var(--winner)";
-  document.querySelector('.ticker-label').textContent = "ELEITO";
+function finishElection() {
+  document.getElementById('urnaPref').textContent = "100%";
+  document.getElementById('urnaVer').textContent = "100%";
+  document.getElementById('tickerLabel').style.background = "#00d26a"; // Verde
+  document.getElementById('tickerLabel').innerText = "ELEITO";
+  document.getElementById('tickerText').innerText = "APURAÇÃO ENCERRADA • RESULTADOS MATEMATICAMENTE DEFINIDOS • PREFEITO E VEREADORES ELEITOS • CONFIRA OS DADOS";
+  
+  // Remove modo pânico
+  document.getElementById('panelPref').classList.remove('panic-mode');
+  
+  // Confete ou brilho final
+  document.body.style.background = "#020617"; // Fica mais escuro para destaque
 }
 
-startApuracao();
+// Iniciar
+setTimeout(startSimulation, 1000);
+
 </script>
 </body>
-</html>         
+</html>
