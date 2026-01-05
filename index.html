@@ -2,42 +2,66 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Eleições 2026 • Apuração Ao Vivo</title>
+<title>Eleições 2026 • Central Oficial de Apuração</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --bg-dark: #0f172a;
-  --bg-card: #1e293b;
+  --bg-dark: #020617;
+  --bg-gradient: radial-gradient(circle at 50% 0%, #1e3a8a 0%, #020617 60%);
+  --card-bg: rgba(30, 41, 59, 0.4);
+  --card-border: rgba(255, 255, 255, 0.1);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --accent: #3b82f6;
   --winner: #10b981;
   --danger: #ef4444;
   --gold: #fbbf24;
-  --card-height: 80px;
-  --gap: 12px;
+  --card-height: 85px;
+  --gap: 14px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
 
 body {
-  background-color: var(--bg-dark);
+  background: var(--bg-dark);
+  background-image: var(--bg-gradient);
   color: var(--text-main);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
-  padding-bottom: 80px; /* Space for news ticker */
+  padding-bottom: 80px;
+  padding-top: 50px; /* Espaço para o banner de aviso */
 }
+
+/* --- AVISO LEGAL (Topo) --- */
+.legal-banner {
+  position: fixed;
+  top: 0; left: 0; width: 100%;
+  background: linear-gradient(90deg, #7f1d1d, #b91c1c);
+  color: #fff;
+  z-index: 1000;
+  padding: 12px;
+  text-align: center;
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid var(--gold);
+}
+
+.legal-banner i { color: var(--gold); animation: blink 1s infinite; }
+.legal-highlight { color: var(--gold); font-weight: 700; text-decoration: underline; }
 
 /* --- HEADER TV STYLE --- */
 header {
-  background: linear-gradient(90deg, #0f172a 0%, #1e3a8a 100%);
-  border-bottom: 4px solid var(--gold);
-  padding: 15px 0;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  padding: 30px 0 20px 0;
   position: relative;
   z-index: 20;
 }
@@ -51,66 +75,54 @@ header {
   align-items: center;
 }
 
-.brand { display: flex; align-items: center; gap: 15px; }
-.brand-icon { font-size: 2.5rem; color: var(--gold); text-shadow: 0 0 15px rgba(251, 191, 36, 0.5); }
-.brand-text h1 { font-family: 'Oswald', sans-serif; font-size: 1.8rem; text-transform: uppercase; letter-spacing: 1px; line-height: 1; }
-.brand-text span { font-size: 0.8rem; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; font-weight: 800; }
+.brand { display: flex; align-items: center; gap: 20px; }
+.brand-icon { 
+  font-size: 3rem; 
+  color: transparent; 
+  background: linear-gradient(180deg, var(--gold), #d97706);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.4));
+}
+.brand-text h1 { 
+  font-family: 'Oswald', sans-serif; 
+  font-size: 2.5rem; 
+  text-transform: uppercase; 
+  letter-spacing: -1px; 
+  line-height: 0.9; 
+  background: linear-gradient(90deg, #fff, #cbd5e1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.brand-text span { 
+  font-size: 0.9rem; 
+  color: var(--accent); 
+  letter-spacing: 4px; 
+  text-transform: uppercase; 
+  font-weight: 800; 
+  display: block; 
+  margin-top: 5px;
+}
 
-.live-indicator {
-  background: rgba(239, 68, 68, 0.2);
+.live-badge {
+  background: rgba(220, 38, 38, 0.15);
   border: 1px solid var(--danger);
   color: var(--danger);
-  padding: 5px 15px;
+  padding: 8px 20px;
   border-radius: 4px;
-  font-weight: 800;
-  font-size: 0.8rem;
+  font-family: 'Oswald', sans-serif;
+  font-size: 1rem;
   display: flex;
   align-items: center;
-  gap: 8px;
-  animation: pulseRed 2s infinite;
-}
-.live-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; }
-
-/* --- CONTROLS --- */
-.controls {
-  display: flex;
   gap: 10px;
-  background: rgba(255,255,255,0.05);
-  padding: 10px;
-  border-radius: 10px;
-  margin: 20px auto;
-  max-width: 1400px;
-  width: 95%;
-  justify-content: center;
-  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
 }
-
-button {
-  border: none;
-  padding: 12px 24px;
-  border-radius: 6px;
-  font-weight: 700;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-family: 'Oswald', sans-serif;
-  letter-spacing: 1px;
-  transition: all 0.2s;
-  color: white;
-}
-
-#btnPause { background: #334155; }
-#btnChaos { 
-  background: linear-gradient(135deg, #b91c1c 0%, #ef4444 100%);
-  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
-  position: relative;
-  overflow: hidden;
-}
-#btnChaos:active { transform: scale(0.95); }
-#btnChaos::after {
-  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-  transform: rotate(45deg);
-  animation: shimmer 3s infinite;
+.live-dot { 
+  width: 10px; height: 10px; 
+  background: var(--danger); 
+  border-radius: 50%; 
+  box-shadow: 0 0 10px var(--danger);
+  animation: pulseRed 1.5s infinite; 
 }
 
 /* --- DASHBOARD --- */
@@ -120,245 +132,309 @@ button {
   padding: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 40px;
 }
 
 .panel {
-  background: var(--bg-card);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255,255,255,0.05);
-  position: relative;
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 25px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.4);
+  display: flex; flex-direction: column;
 }
 
 .panel-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 20px;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
-  padding-bottom: 10px;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding-bottom: 15px;
 }
 
-.panel-title { font-family: 'Oswald', sans-serif; font-size: 1.5rem; color: var(--text-main); }
-.panel-stats { color: var(--text-muted); font-size: 0.9rem; }
-.panel-stats span { color: var(--gold); font-weight: bold; }
+.panel-title { 
+  font-family: 'Oswald', sans-serif; 
+  font-size: 1.8rem; 
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+.panel-stats { 
+  font-family: 'Inter', sans-serif;
+  background: rgba(0,0,0,0.3);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.panel-stats span { color: var(--gold); font-weight: 700; margin-left: 5px; }
 
-/* --- LISTA DE CANDIDATOS (ANIMADA) --- */
+/* --- LISTA DE CANDIDATOS --- */
 .candidates-wrapper {
   position: relative;
-  /* Altura baseada em 8 candidatos * altura do card + gaps */
-  height: 600px; 
+  /* Altura = 8 cards * (85px altura + 14px gap) */
+  height: 800px; 
 }
 
 .candidate-card {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 0; right: 0;
   height: var(--card-height);
-  background: rgba(30, 41, 59, 0.7);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(90deg, rgba(30, 41, 59, 0.6), rgba(15, 23, 42, 0.8));
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 8px;
   display: flex;
   align-items: center;
-  padding: 0 15px;
-  transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.3s, background 0.3s;
-  backdrop-filter: blur(5px);
+  padding: 0 20px;
+  transition: top 0.7s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.3s, background 0.3s, border-color 0.3s;
+  overflow: hidden;
 }
 
-/* O 1º lugar ganha destaque */
+/* Efeito Hover leve */
+.candidate-card:hover { border-color: rgba(255,255,255,0.2); }
+
+/* ESTILO DO 1º LUGAR */
 .candidate-card.rank-1 {
-  background: linear-gradient(90deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), rgba(6, 78, 59, 0.4));
   border: 1px solid var(--winner);
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
   z-index: 10;
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
 }
-.candidate-card.rank-1 .c-pos { background: var(--winner); color: #fff; }
+.candidate-card.rank-1 .c-pos { background: var(--winner); color: #064e3b; box-shadow: 0 0 10px var(--winner); }
+.candidate-card.rank-1 .c-pct { color: var(--winner); text-shadow: 0 0 10px rgba(16, 185, 129, 0.4); }
 
 .c-pos {
-  width: 30px; height: 30px;
+  width: 36px; height: 36px;
   background: #334155;
+  color: #94a3b8;
   border-radius: 50%;
   display: flex; justify-content: center; align-items: center;
-  font-weight: 700; font-size: 0.9rem;
-  margin-right: 15px;
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700; font-size: 1.1rem;
+  margin-right: 20px;
+  flex-shrink: 0;
+  transition: all 0.5s;
 }
 
 .c-img {
   width: 50px; height: 50px;
-  background: #475569;
+  background: linear-gradient(135deg, #475569, #1e293b);
   border-radius: 50%;
-  margin-right: 15px;
+  margin-right: 20px;
   display: flex; justify-content: center; align-items: center;
-  font-size: 1.5rem; color: #94a3b8;
+  font-size: 1.4rem; color: #cbd5e1;
+  border: 2px solid rgba(255,255,255,0.05);
+  flex-shrink: 0;
 }
 
-.c-info { flex: 1; }
-.c-name { font-weight: 700; font-size: 1.1rem; display: block; }
-.c-party { font-size: 0.8rem; color: var(--text-muted); background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; margin-top: 2px; display: inline-block;}
+.c-info { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.c-name { 
+  font-weight: 700; font-size: 1.15rem; color: #fff; letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.c-party { 
+  font-size: 0.75rem; 
+  color: var(--text-muted); 
+  text-transform: uppercase; 
+  letter-spacing: 1px;
+  display: flex; align-items: center; gap: 6px;
+}
+.party-badge {
+  background: rgba(255,255,255,0.1); 
+  padding: 2px 6px; 
+  border-radius: 3px; 
+  font-weight: 600;
+  font-size: 0.7rem;
+}
 
-.c-votes { text-align: right; }
-.c-pct { font-size: 1.4rem; font-weight: 800; color: var(--text-main); display: block; }
-.c-abs { font-size: 0.85rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.c-votes { text-align: right; z-index: 2; }
+.c-pct { 
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.8rem; 
+  font-weight: 700; 
+  color: #fff; 
+  display: block; 
+  line-height: 1;
+}
+.c-abs { 
+  font-size: 0.8rem; 
+  color: var(--text-muted); 
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
 
 .bar-container {
   position: absolute;
   bottom: 0; left: 0; right: 0;
   height: 4px;
-  background: transparent;
-  overflow: hidden;
-  border-radius: 0 0 8px 8px;
+  background: rgba(0,0,0,0.3);
 }
 .bar-fill {
   height: 100%;
   background: var(--accent);
-  transition: width 0.5s ease;
+  transition: width 0.8s ease-out;
   width: 0%;
-  box-shadow: 0 0 10px var(--accent);
+  box-shadow: 0 0 15px var(--accent);
+  position: relative;
 }
-.rank-1 .bar-fill { background: var(--winner); box-shadow: 0 0 10px var(--winner); }
+.bar-fill::after {
+  content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 4px; background: #fff;
+  opacity: 0.7; box-shadow: 0 0 5px #fff;
+}
+.rank-1 .bar-fill { background: var(--winner); box-shadow: 0 0 15px var(--winner); }
 
 /* --- NEWS TICKER --- */
 .news-ticker {
   position: fixed;
   bottom: 0; left: 0; width: 100%;
   background: #000;
-  border-top: 2px solid var(--gold);
+  border-top: 3px solid var(--gold);
   color: white;
   display: flex;
-  height: 50px;
+  height: 45px;
   z-index: 100;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
 }
 .ticker-label {
   background: var(--gold);
   color: #000;
-  padding: 0 20px;
+  padding: 0 30px;
   display: flex; align-items: center;
-  font-weight: 900;
+  font-weight: 800;
   font-family: 'Oswald', sans-serif;
   text-transform: uppercase;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  letter-spacing: 1px;
 }
 .ticker-content {
   flex: 1;
   display: flex; align-items: center;
   overflow: hidden;
   white-space: nowrap;
-  padding-left: 20px;
-  font-size: 1.1rem;
+  background: #0f172a;
 }
 .ticker-item {
-  animation: slideLeft 20s linear infinite;
+  animation: slideLeft 25s linear infinite;
   display: inline-block;
-}
-
-/* --- OVERLAY DE REVIRAVOLTA --- */
-.twist-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(220, 38, 38, 0.2);
-  z-index: 99;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s;
-  display: flex; justify-content: center; align-items: center;
-}
-.twist-overlay.active { opacity: 1; animation: shake 0.5s ease-in-out; }
-.twist-text {
-  font-family: 'Oswald', sans-serif;
-  font-size: 5rem;
-  color: white;
-  text-transform: uppercase;
-  background: var(--danger);
-  padding: 20px 40px;
-  transform: rotate(-5deg);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-  border: 4px solid white;
+  padding-left: 100%;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e2e8f0;
 }
 
 /* --- ANIMATIONS --- */
-@keyframes shimmer { 0% { left: -50%; } 100% { left: 150%; } }
-@keyframes pulseRed { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
-@keyframes slideLeft { from { transform: translateX(100vw); } to { transform: translateX(-100%); } }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+@keyframes slideLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-200%); } }
+/* --- EFEITOS DE DRAMA/TENSÃO --- */
+
+/* Quando a diferença é pequena, a barra do 2º lugar pulsa */
+@keyframes heartbeat {
+  0% { box-shadow: 0 0 5px var(--accent); }
+  50% { box-shadow: 0 0 20px var(--accent), 0 0 10px #fff; }
+  100% { box-shadow: 0 0 5px var(--accent); }
+}
+
+.close-call .bar-fill {
+  animation: heartbeat 0.8s infinite;
+  background: var(--gold) !important; /* Muda para amarelo alerta */
+}
+
+/* Indicador de diferença de votos */
+.diff-badge {
+  font-size: 0.7rem;
+  background: rgba(0,0,0,0.5);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+}
+.rank-1 .diff-badge { display: none; } /* Líder não mostra diferença pra ele mesmo */
+.close-call .diff-badge { color: var(--danger); font-weight: bold; animation: blink 1s infinite; }
+
+/* Ticker em modo pânico */
+.ticker-panic {
+  background: var(--danger) !important; 
+  color: #fff !important;
+}
+
 
 @media (max-width: 900px) {
-  .dashboard { grid-template-columns: 1fr; }
-  .twist-text { font-size: 3rem; }
+  .dashboard { grid-template-columns: 1fr; gap: 20px; }
+  .brand-text h1 { font-size: 1.8rem; }
+  .legal-banner { font-size: 0.7rem; flex-direction: column; gap: 2px; }
+  .candidates-wrapper { height: 750px; } /* Ajuste mobile */
 }
 </style>
 </head>
 <body>
 
+<div class="legal-banner">
+  <i class="fas fa-exclamation-triangle"></i>
+  <span>O resultado só pode ser falado depois das 00h. Se falar, a punição é de <span class="legal-highlight">Inegibilidade por 1 eleição</span>.</span>
+  <i class="fas fa-exclamation-triangle"></i>
+</div>
+
 <header>
   <div class="header-container">
     <div class="brand">
-      <i class="fas fa-globe-americas brand-icon"></i>
+      <i class="fas fa-database brand-icon"></i>
       <div class="brand-text">
         <h1>Apuração 2026</h1>
-        <span>Central de Dados</span>
+        <span>Sistema Unificado de Dados</span>
       </div>
     </div>
-    <div class="live-indicator">
-      <div class="live-dot"></div> AO VIVO
+    <div class="live-badge">
+      <div class="live-dot"></div> TRANSMISSÃO AO VIVO
     </div>
   </div>
 </header>
 
-<div class="controls">
-  <button id="btnPause"><i class="fas fa-pause"></i> Pausar</button>
-  <button id="btnChaos"><i class="fas fa-bolt"></i> FORÇAR VIRADA AGORA</button>
-</div>
-
 <div class="dashboard">
   <div class="panel">
     <div class="panel-header">
-      <div class="panel-title">PREFEITURA MUNICIPAL</div>
+      <div class="panel-title">PREFEITURA</div>
       <div class="panel-stats">
-        Urnas: <span id="urnasPref">0%</span> • Votos: <span id="votosPref">0</span>
+        URNAS APURADAS: <span id="urnasPref">0%</span>
       </div>
     </div>
-    <div class="candidates-wrapper" id="containerPref">
-      </div>
+    <div class="candidates-wrapper" id="containerPref"></div>
   </div>
 
   <div class="panel">
     <div class="panel-header">
       <div class="panel-title">CÂMARA MUNICIPAL</div>
       <div class="panel-stats">
-        Vagas: <span>5</span> • Urnas: <span id="urnasVer">0%</span>
+        URNAS APURADAS: <span id="urnasVer">0%</span>
       </div>
     </div>
-    <div class="candidates-wrapper" id="containerVer">
-      </div>
+    <div class="candidates-wrapper" id="containerVer"></div>
   </div>
 </div>
 
 <div class="news-ticker">
-  <div class="ticker-label">BREAKING NEWS</div>
+  <div class="ticker-label">ÚLTIMAS NOTÍCIAS</div>
   <div class="ticker-content">
-    <span id="tickerText" class="ticker-item">ACOMPANHE A APURAÇÃO EM TEMPO REAL • URNAS COMEÇAM A CHEGAR NO CENTRO DE APURAÇÃO • EXPECTATIVA DE RECORDE DE VOTOS...</span>
+    <div class="ticker-item" id="tickerText">
+      AGUARDANDO LIBERAÇÃO DO TSE • APURAÇÃO SEGUE EM RITMO ACELERADO • RESULTADOS PARCIAIS SUJEITOS A ALTERAÇÃO • MANTENHA O SIGILO ATÉ 00H
+    </div>
   </div>
-</div>
-
-<div class="twist-overlay" id="fxOverlay">
-  <div class="twist-text">VIRADA!</div>
 </div>
 
 <script>
 // --- DADOS INICIAIS ---
-// IDs únicos para rastrear animação
 const prefeitos = [
-  { id: 'p1', nome: "Rodrigo Manga", numero: 28, partido: "PRTB", votos: 4500, cor: "#28a745" },
-  { id: 'p2', nome: "Ryan Everton", numero: 22, partido: "PL", votos: 4400, cor: "#0d6efd" }, // Começa perto pra ter briga
-  { id: 'p3', nome: "Arthur Silva", numero: 17, partido: "PSL", votos: 3200, cor: "#dc3545" },
-  { id: 'p4', nome: "Gabriel Arraes", numero: 77, partido: "SD", votos: 2800, cor: "#0dcaf0" },
-  { id: 'p5', nome: "Javier Mendonza", numero: 35, partido: "PMB", votos: 1500, cor: "#ffc107" },
-  { id: 'p6', nome: "Noah D.", numero: 10, partido: "RPL", votos: 1200, cor: "#fd7e14" },
-  { id: 'p7', nome: "Henrique Martins", numero: 15, partido: "MDB", votos: 800, cor: "#6c757d" }
-  { id: 'p8', nome: "Fernando Hauss", numero: 43, partido: "PV", votos: 211, cor: "#bab86c" }
-
+  { id: 'p1', nome: "Rodrigo Manga", numero: 28, partido: "PRTB", votos: 12500, base: 1.0 }, // Base = multiplicador de força
+  { id: 'p2', nome: "Ryan Everton", numero: 22, partido: "PL", votos: 11800, base: 1.1 }, // Ryan tem base maior para virar no final
+  { id: 'p3', nome: "Arthur Silva", numero: 17, partido: "PSL", votos: 5200, base: 0.8 },
+  { id: 'p4', nome: "Gabriel Arraes", numero: 77, partido: "SD", votos: 4800, base: 0.7 },
+  { id: 'p5', nome: "Javier Mendonza", numero: 35, partido: "PMB", votos: 1500, base: 0.5 },
+  { id: 'p6', nome: "Noah D.", numero: 10, partido: "RPL", votos: 1200, base: 0.5 },
+  { id: 'p7', nome: "Henrique Martins", numero: 15, partido: "MDB", votos: 800, base: 0.4 },
+  { id: 'p8', nome: "Fernando Hauss", numero: 43, partido: "PV", votos: 211, base: 0.2 }
 ];
 
 const vereadores = [
@@ -372,34 +448,31 @@ const vereadores = [
   { id: 'v8', nome: "Thaise G.", numero: 11111, partido: "PP", votos: 850 }
 ];
 
-// Configurações
-const TOTAL_URNAS = 500;
+const TOTAL_URNAS = 1500;
 let urnasApuradas = 0;
 let intervalId = null;
-let isPaused = false;
 
-// --- INICIALIZAÇÃO DO DOM ---
+// --- INICIALIZAÇÃO ---
 function createCards(data, containerId) {
   const container = document.getElementById(containerId);
   container.innerHTML = '';
-  
   data.forEach((c, index) => {
     const card = document.createElement('div');
     card.className = 'candidate-card';
     card.id = c.id;
-    // Posicionamento inicial
-    card.style.top = `${index * (80 + 12)}px`; // altura + gap
+    card.style.top = `${index * 99}px`;
     
     card.innerHTML = `
       <div class="c-pos">${index + 1}º</div>
       <div class="c-img"><i class="fas fa-user"></i></div>
       <div class="c-info">
         <span class="c-name">${c.nome}</span>
-        <span class="c-party">${c.numero} • ${c.partido}</span>
+        <div class="c-party"><span class="party-badge">${c.numero}</span> ${c.partido}</div>
       </div>
       <div class="c-votes">
         <span class="c-pct">0.00%</span>
-        <span class="c-abs">${c.votos.toLocaleString()} votos</span>
+        <div class="c-abs">${c.votos.toLocaleString()} VOTOS</div>
+        <div class="diff-badge">Dif: -0</div>
       </div>
       <div class="bar-container">
         <div class="bar-fill" style="width: 0%"></div>
@@ -412,157 +485,177 @@ function createCards(data, containerId) {
 createCards(prefeitos, 'containerPref');
 createCards(vereadores, 'containerVer');
 
-// --- MOTOR DE APURAÇÃO ---
+// --- MOTOR DE SUSPENSE ---
 function startApuracao() {
   intervalId = setInterval(() => {
-    if (isPaused || urnasApuradas >= TOTAL_URNAS) return;
+    if (urnasApuradas >= TOTAL_URNAS) {
+      finalizarApuracao();
+      return;
+    }
     
-    urnasApuradas++;
+    // Acelera no meio, desacelera no final para suspense
+    let speed = 2;
+    if (urnasApuradas > TOTAL_URNAS * 0.9) speed = 1; // Fica tenso no final (lento)
     
-    // Injeta votos "normais" (aleatórios pequenos)
-    injetarVotos(prefeitos, 50, 200);
-    injetarVotos(vereadores, 20, 100);
+    urnasApuradas += Math.floor(Math.random() * 5) + speed;
     
-    // 5% de chance de ocorrer uma virada automática pequena
-    if (Math.random() < 0.05) triggerMinorTwist();
+    // VEREADORES (Lógica Normal)
+    injetarVotosNormal(vereadores);
     
+    // PREFEITOS (Lógica de Drama Scriptado)
+    gerenciarDramaPrefeito();
+
     updateScreen();
-    
-    if (urnasApuradas === TOTAL_URNAS) {
-      document.getElementById('tickerText').textContent = "APURAÇÃO ENCERRADA • RESULTADOS OFICIAIS DEFINIDOS";
-      clearInterval(intervalId);
-    }
-  }, 1500); // Atualiza a cada 1.5s
+  }, 800); // Atualização rápida
 }
 
-function injetarVotos(lista, min, max) {
+function injetarVotosNormal(lista) {
   lista.forEach(c => {
-    // Adiciona votos aleatórios
-    const novosVotos = Math.floor(Math.random() * (max - min + 1)) + min;
-    c.votos += novosVotos;
+    c.votos += Math.floor(Math.random() * 30);
   });
 }
 
-// --- ATUALIZAÇÃO VISUAL (ONDE A MÁGICA ACONTECE) ---
-function updateScreen() {
-  const pctUrnas = (urnasApuradas / TOTAL_URNAS) * 100;
-  document.getElementById('urnasPref').textContent = pctUrnas.toFixed(1) + '%';
-  document.getElementById('urnasVer').textContent = pctUrnas.toFixed(1) + '%';
+function gerenciarDramaPrefeito() {
+  const porcentagem = (urnasApuradas / TOTAL_URNAS) * 100;
   
-  // Calcular total de votos para porcentagem
-  const totalVotosPref = prefeitos.reduce((acc, c) => acc + c.votos, 0);
-  document.getElementById('votosPref').textContent = totalVotosPref.toLocaleString();
-  const totalVotosVer = vereadores.reduce((acc, c) => acc + c.votos, 0);
+  // Ordena para saber quem é lider e vice
+  let rankingTemp = [...prefeitos].sort((a, b) => b.votos - a.votos);
+  let lider = rankingTemp[0];
+  let vice = rankingTemp[1];
+  let diferenca = lider.votos - vice.votos;
 
-  updatePanel(prefeitos, totalVotosPref, 'containerPref');
-  updatePanel(vereadores, totalVotosVer, 'containerVer');
-}
-
-function updatePanel(lista, totalVotos, containerId) {
-  // 1. Ordenar dados (cópia para não perder referência se precisasse)
-  // Mas aqui vamos ordenar a lista original para saber o ranking
-  const ranking = [...lista].sort((a, b) => b.votos - a.votos);
-  
-  // 2. Aplicar mudanças no DOM
-  ranking.forEach((c, index) => {
-    const card = document.getElementById(c.id);
+  prefeitos.forEach(c => {
+    // Votos base
+    let incremento = Math.floor(Math.random() * 150 * (c.base || 1));
     
-    // Mover Card (Animação CSS cuida da transição)
-    const topPos = index * (80 + 12);
-    card.style.top = `${topPos}px`;
-    
-    // Atualizar Posição
-    const posEl = card.querySelector('.c-pos');
-    posEl.textContent = `${index + 1}º`;
-    
-    // Atualizar Estilos de Líder
-    if (index === 0) {
-      card.classList.add('rank-1');
-    } else {
-      card.classList.remove('rank-1');
+    // --- FASE 1: CONSOLIDAÇÃO (0-60%) ---
+    // O líder ganha um pouco mais para assustar
+    if (porcentagem < 60 && c === lider) {
+      incremento += 50; 
     }
-    
-    // Atualizar Números
-    const pct = totalVotos > 0 ? (c.votos / totalVotos * 100).toFixed(2) : "0.00";
-    card.querySelector('.c-pct').textContent = `${pct}%`;
-    card.querySelector('.c-abs').textContent = `${c.votos.toLocaleString()} votos`;
-    card.querySelector('.bar-fill').style.width = `${pct}%`;
+
+    // --- FASE 2: A REAÇÃO (60-85%) ---
+    // O vice começa a receber pacotes massivos de votos
+    if (porcentagem >= 60 && porcentagem < 85) {
+      if (c === vice) incremento += Math.floor(Math.random() * 300) + 100; // BOOM!
+    }
+
+    // --- FASE 3: O CLÍMAX (85-98%) ---
+    // "Rubber Band Effect": Se a diferença for grande, ajuda o vice.
+    // Se o vice passou, freia o vice e ajuda o antigo lider.
+    if (porcentagem >= 85) {
+      if (diferenca > 2000 && c === vice) {
+         incremento += 600; // Ajuda agressiva pro vice buscar
+      } else if (diferenca < -500 && c === lider) { 
+         incremento += 600; // Vice passou demais? Ajuda o antigo lider a recuperar
+      } else if (Math.abs(diferenca) < 1000) {
+         // Empate técnico: Votos aleatórios caóticos para troca de posição constante
+         incremento += Math.floor(Math.random() * 400); 
+      }
+    }
+
+    c.votos += incremento;
   });
+
+  // Atualiza Ticker com base na tensão
+  atualizarTicker(diferenca, porcentagem);
 }
 
-// --- SISTEMA DE REVIRAVOLTAS ---
-function forcarVirada() {
-  if (urnasApuradas >= TOTAL_URNAS) return alert("Apuração já encerrada!");
-
-  // Efeito Visual
-  const overlay = document.getElementById('fxOverlay');
-  overlay.classList.add('active');
-  setTimeout(() => overlay.classList.remove('active'), 1000);
-  
-  // Notícia
-  const frases = [
-    "URGENTE: URNAS DA ZONA SUL CHEGAM E MUDAM O CENÁRIO!",
-    "REVIRAVOLTA: CANDIDATO GANHA FORÇA INESPERADA!",
-    "ATENÇÃO: MATEMÁTICA ELEITORAL MUDA COM NOVOS DADOS!"
-  ];
-  const fraseEscolhida = frases[Math.floor(Math.random() * frases.length)];
+function atualizarTicker(diferenca, pct) {
   const ticker = document.getElementById('tickerText');
-  ticker.textContent = fraseEscolhida;
-  ticker.style.color = "var(--gold)";
+  const label = document.querySelector('.ticker-label');
+  const container = document.querySelector('.ticker-content');
   
-  // Lógica de Virada (Prefeito)
-  realizarVirada(prefeitos);
-  // Lógica de Virada (Vereador)
-  realizarVirada(vereadores);
-  
-  updateScreen();
-}
-
-function realizarVirada(lista) {
-  // Ordenar atual
-  let ranking = [...lista].sort((a, b) => b.votos - a.votos);
-  
-  // Pegar o 1º e o 2º
-  const primeiro = ranking[0];
-  const segundo = ranking[1];
-  
-  if (!segundo) return; // Segurança
-  
-  // Calcular diferença
-  const diferenca = primeiro.votos - segundo.votos;
-  
-  // Dar ao segundo votos suficientes para passar o primeiro + um extra aleatório
-  const boost = diferenca + Math.floor(Math.random() * 2000) + 500;
-  
-  segundo.votos += boost;
-  
-  // Às vezes, impulsionar um underdog (3º ou 4º lugar)
-  if (Math.random() > 0.5 && ranking[2]) {
-     ranking[2].votos += boost * 0.8; // O 3º lugar também sobe muito
+  if (pct > 90 && Math.abs(diferenca) < 1500) {
+    // MODO PÂNICO
+    label.classList.add('ticker-panic');
+    label.innerText = "ALERTA MÁXIMO";
+    ticker.innerText = `⚠️ ATENÇÃO: DIFERENÇA DE APENAS ${Math.abs(diferenca).toLocaleString()} VOTOS! • CENÁRIO DE EMPATE TÉCNICO • DISPUTA VOTO A VOTO!`;
+  } else if (pct > 60 && diferenca < 5000) {
+    label.classList.remove('ticker-panic');
+    label.innerText = "REVIRAVOLTA?";
+    ticker.innerText = "URNAS DA PERIFERIA IMPULSIONAM O 2º COLOCADO • DISTÂNCIA DIMINUI RAPIDAMENTE...";
+  } else {
+    label.classList.remove('ticker-panic');
+    label.innerText = "EM TEMPO REAL";
+    ticker.innerText = "ACOMPANHE A APURAÇÃO OFICIAL • DADOS ATUALIZADOS DIRETAMENTE DO TSE • MANTENHA A CALMA";
   }
 }
 
-function triggerMinorTwist() {
-    // Pequena turbulência aleatória sem apertar o botão
-    const ticker = document.getElementById('tickerText');
-    ticker.textContent = "NOVAS PARCIAIS INDICAM DISPUTA ACIRRADA NOS BAIRROS PERIFÉRICOS...";
-    
-    // Escolhe um candidato aleatório (exceto o primeiro) e dá um boost
-    const randomIdx = Math.floor(Math.random() * (prefeitos.length - 1)) + 1;
-    prefeitos[randomIdx].votos += 1500;
+// --- VISUALIZAÇÃO ---
+function updateScreen() {
+  const pctUrnas = Math.min((urnasApuradas / TOTAL_URNAS) * 100, 100);
+  document.getElementById('urnasPref').textContent = pctUrnas.toFixed(2) + '%';
+  document.getElementById('urnasVer').textContent = pctUrnas.toFixed(2) + '%';
+  
+  const totalVotosPref = prefeitos.reduce((acc, c) => acc + c.votos, 0);
+  const totalVotosVer = vereadores.reduce((acc, c) => acc + c.votos, 0);
+
+  updatePanel(prefeitos, totalVotosPref);
+  updatePanel(vereadores, totalVotosVer);
 }
 
-// Controles
-document.getElementById('btnPause').addEventListener('click', function() {
-  isPaused = !isPaused;
-  this.innerHTML = isPaused ? '<i class="fas fa-play"></i> Continuar' : '<i class="fas fa-pause"></i> Pausar';
-});
+function updatePanel(lista, totalVotos) {
+  const ranking = [...lista].sort((a, b) => b.votos - a.votos);
+  const liderVotos = ranking[0].votos;
 
-document.getElementById('btnChaos').addEventListener('click', forcarVirada);
+  ranking.forEach((c, index) => {
+    const card = document.getElementById(c.id);
+    card.style.top = `${index * 99}px`;
+    
+    // Atualiza Posição
+    const posEl = card.querySelector('.c-pos');
+    posEl.textContent = `${index + 1}º`;
+    
+    // Estilo Lider
+    if (index === 0) {
+      card.classList.add('rank-1');
+      card.classList.remove('close-call');
+      posEl.style.background = "var(--winner)";
+      posEl.style.color = "#064e3b";
+    } else {
+      card.classList.remove('rank-1');
+      posEl.style.background = "#334155";
+      posEl.style.color = "#94a3b8";
+      
+      // Se for o 2º lugar e estiver perto (menos de 3% de diferença do total ou 2000 votos)
+      if (index === 1 && (liderVotos - c.votos) < 2500) {
+        card.classList.add('close-call');
+      } else {
+        card.classList.remove('close-call');
+      }
+    }
+    
+    // Atualiza Texto
+    const pct = totalVotos > 0 ? (c.votos / totalVotos * 100).toFixed(2) : "0.00";
+    card.querySelector('.c-pct').textContent = `${pct}%`;
+    card.querySelector('.c-abs').textContent = `${c.votos.toLocaleString()} VOTOS`;
+    
+    // Diferença para o líder
+    const diffEl = card.querySelector('.diff-badge');
+    if (index > 0) {
+      const diff = liderVotos - c.votos;
+      diffEl.textContent = `Dif: -${diff.toLocaleString()}`;
+      diffEl.style.display = 'inline-block';
+    } else {
+      diffEl.style.display = 'none';
+    }
 
-// Iniciar
+    // Barra
+    const larguraBarra = liderVotos > 0 ? (c.votos / liderVotos * 100) : 0;
+    card.querySelector('.bar-fill').style.width = `${larguraBarra}%`;
+  });
+}
+
+function finalizarApuracao() {
+  clearInterval(intervalId);
+  document.getElementById('tickerText').textContent = "APURAÇÃO ENCERRADA. RESULTADO CONFIRMADO.";
+  document.querySelector('.ticker-label').classList.remove('ticker-panic');
+  document.querySelector('.ticker-label').style.background = "var(--winner)";
+  document.querySelector('.ticker-label').textContent = "ELEITO";
+}
+
 startApuracao();
-
 </script>
 </body>
-</html>
+</html>         
